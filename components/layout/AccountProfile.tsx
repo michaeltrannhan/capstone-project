@@ -12,41 +12,6 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Profile } from "../utils/commons";
-
-const FileInput = () => {
-  const [selectedImage, setSelectedImage] = React.useState(null);
-  const [imageUrl, setImageUrl] = React.useState(null);
-
-  React.useEffect(() => {
-    if (selectedImage) {
-      setImageUrl(URL.createObjectURL(selectedImage));
-    }
-  }, [selectedImage]);
-
-  return (
-    <>
-      <input
-        accept="image/*"
-        type="file"
-        id="select-image"
-        style={{ display: "none" }}
-        onChange={(e) => setSelectedImage(e.target.files[0])}
-      />
-      <label htmlFor="select-image">
-        <Button variant="contained" color="primary" component="span">
-          Upload Image
-        </Button>
-      </label>
-      {imageUrl && selectedImage && (
-        <Box mt={2} textAlign="center">
-          <div>Image Preview:</div>
-          <img src={imageUrl} alt={selectedImage.name} height="100px" />
-        </Box>
-      )}
-    </>
-  );
-};
-
 interface AccountProfileProps {
   profile: Profile;
 }
