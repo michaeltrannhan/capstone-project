@@ -1,0 +1,619 @@
+{
+  "id": 4,
+  "passwordHash": "$2b$15$LjVseUh5MfPMHpvxxlg9p.gQ3IR99Fy.ohFVpfUfb18pNq62G/1Za",
+  "code": "1cebd111-261c-412c-a946-23ef36c16a6a",
+  "email": null,
+  "firstName": null,
+  "lastName": null,
+  "gender": null,
+  "address": null,
+  "socialSecurityNumber": null,
+  "nationality": null,
+  "birthday": null,
+  "lastActive": "2023-04-03T14:44:03.947Z",
+  "createdAt": "2023-04-03T14:44:03.947Z",
+  "updatedAt": "2023-04-03T14:44:03.947Z",
+  "roleId": 2,
+  "role": {
+    "id": 2,
+    "name": "HOSPITAL_ADMIN",
+    "description": "HOSPITAL_ADMIN",
+    "createdAt": "2023-04-03T14:44:01.178Z",
+    "updatedAt": "2023-04-03T14:44:01.178Z",
+    "roleAccessesResources": [
+      {
+        "resourceId": 17,
+        "roleId": 2,
+        "canView": true,
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false,
+        "createdAt": "2023-04-03T14:44:01.178Z",
+        "updatedAt": "2023-04-03T14:44:01.178Z",
+        "resource": {
+          "id": 17,
+          "name": "attachment",
+          "description": "attachment",
+          "createdAt": "2023-04-03T14:44:01.144Z",
+          "updatedAt": "2023-04-03T14:44:01.144Z"
+        }
+      },
+      {
+        "resourceId": 12,
+        "roleId": 2,
+        "canView": true,
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false,
+        "createdAt": "2023-04-03T14:44:01.178Z",
+        "updatedAt": "2023-04-03T14:44:01.178Z",
+        "resource": {
+          "id": 12,
+          "name": "hospital",
+          "description": "hospital",
+          "createdAt": "2023-04-03T14:44:01.134Z",
+          "updatedAt": "2023-04-03T14:44:01.134Z"
+        }
+      },
+      {
+        "resourceId": 16,
+        "roleId": 2,
+        "canView": true,
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false,
+        "createdAt": "2023-04-03T14:44:01.178Z",
+        "updatedAt": "2023-04-03T14:44:01.178Z",
+        "resource": {
+          "id": 16,
+          "name": "medication",
+          "description": "medication",
+          "createdAt": "2023-04-03T14:44:01.142Z",
+          "updatedAt": "2023-04-03T14:44:01.142Z"
+        }
+      },
+      {
+        "resourceId": 15,
+        "roleId": 2,
+        "canView": true,
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true,
+        "createdAt": "2023-04-03T14:44:01.178Z",
+        "updatedAt": "2023-04-03T14:44:01.178Z",
+        "resource": {
+          "id": 15,
+          "name": "reminder_plan_includes_medication",
+          "description": "reminder_plan_includes_medication",
+          "createdAt": "2023-04-03T14:44:01.140Z",
+          "updatedAt": "2023-04-03T14:44:01.140Z"
+        }
+      },
+      {
+        "resourceId": 14,
+        "roleId": 2,
+        "canView": true,
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true,
+        "createdAt": "2023-04-03T14:44:01.178Z",
+        "updatedAt": "2023-04-03T14:44:01.178Z",
+        "resource": {
+          "id": 14,
+          "name": "reminder_plan",
+          "description": "reminder_plan",
+          "createdAt": "2023-04-03T14:44:01.137Z",
+          "updatedAt": "2023-04-03T14:44:01.137Z"
+        }
+      },
+      {
+        "resourceId": 13,
+        "roleId": 2,
+        "canView": true,
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true,
+        "createdAt": "2023-04-03T14:44:01.178Z",
+        "updatedAt": "2023-04-03T14:44:01.178Z",
+        "resource": {
+          "id": 13,
+          "name": "medication_plan",
+          "description": "medication_plan",
+          "createdAt": "2023-04-03T14:44:01.135Z",
+          "updatedAt": "2023-04-03T14:44:01.135Z"
+        }
+      },
+      {
+        "resourceId": 11,
+        "roleId": 2,
+        "canView": true,
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true,
+        "createdAt": "2023-04-03T14:44:01.178Z",
+        "updatedAt": "2023-04-03T14:44:01.178Z",
+        "resource": {
+          "id": 11,
+          "name": "patient_saves_article",
+          "description": "patient_saves_article",
+          "createdAt": "2023-04-03T14:44:01.132Z",
+          "updatedAt": "2023-04-03T14:44:01.132Z"
+        }
+      },
+      {
+        "resourceId": 10,
+        "roleId": 2,
+        "canView": true,
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true,
+        "createdAt": "2023-04-03T14:44:01.178Z",
+        "updatedAt": "2023-04-03T14:44:01.178Z",
+        "resource": {
+          "id": 10,
+          "name": "article",
+          "description": "article",
+          "createdAt": "2023-04-03T14:44:01.129Z",
+          "updatedAt": "2023-04-03T14:44:01.129Z"
+        }
+      },
+      {
+        "resourceId": 9,
+        "roleId": 2,
+        "canView": true,
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true,
+        "createdAt": "2023-04-03T14:44:01.178Z",
+        "updatedAt": "2023-04-03T14:44:01.178Z",
+        "resource": {
+          "id": 9,
+          "name": "patient_account",
+          "description": "patient_account",
+          "createdAt": "2023-04-03T14:44:01.127Z",
+          "updatedAt": "2023-04-03T14:44:01.127Z"
+        }
+      },
+      {
+        "resourceId": 8,
+        "roleId": 2,
+        "canView": true,
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true,
+        "createdAt": "2023-04-03T14:44:01.178Z",
+        "updatedAt": "2023-04-03T14:44:01.178Z",
+        "resource": {
+          "id": 8,
+          "name": "doctor_manages_patient",
+          "description": "doctor_manages_patient",
+          "createdAt": "2023-04-03T14:44:01.125Z",
+          "updatedAt": "2023-04-03T14:44:01.125Z"
+        }
+      },
+      {
+        "resourceId": 7,
+        "roleId": 2,
+        "canView": true,
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true,
+        "createdAt": "2023-04-03T14:44:01.178Z",
+        "updatedAt": "2023-04-03T14:44:01.178Z",
+        "resource": {
+          "id": 7,
+          "name": "doctor_account",
+          "description": "doctor_account",
+          "createdAt": "2023-04-03T14:44:01.123Z",
+          "updatedAt": "2023-04-03T14:44:01.123Z"
+        }
+      },
+      {
+        "resourceId": 5,
+        "roleId": 2,
+        "canView": true,
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true,
+        "createdAt": "2023-04-03T14:44:01.178Z",
+        "updatedAt": "2023-04-03T14:44:01.178Z",
+        "resource": {
+          "id": 5,
+          "name": "operator_account",
+          "description": "operator_account",
+          "createdAt": "2023-04-03T14:44:01.119Z",
+          "updatedAt": "2023-04-03T14:44:01.119Z"
+        }
+      }
+    ]
+  },
+  "operatorAccount": {
+    "userAccountId": 4,
+    "username": "hospital.admin.1",
+    "phoneNumber": null,
+    "hospitalId": 1,
+    "hospital": {
+      "id": 1,
+      "name": "Tan Phu District Hospital",
+      "description": "609-611 Au Co street, Phu Trung Ward, Tan Phu District, HCMC",
+      "createdAt": "2023-04-03T14:44:01.210Z",
+      "updatedAt": "2023-04-03T14:44:01.210Z"
+    },
+    "hospitalAdminAccount": {
+      "operatorAccountId": 4
+    }
+  }
+}
+
+
+// Doctors 
+[
+    {
+        "id": 6,
+        "passwordHash": "$2b$15$LjVseUh5MfPMHpvxxlg9p.gQ3IR99Fy.ohFVpfUfb18pNq62G/1Za",
+        "code": "9a9ec693-ffdc-45f1-a83c-345349244698",
+        "email": null,
+        "firstName": null,
+        "lastName": null,
+        "gender": null,
+        "address": null,
+        "socialSecurityNumber": null,
+        "nationality": null,
+        "birthday": null,
+        "lastActive": "2023-04-03T14:44:06.574Z",
+        "createdAt": "2023-04-03T14:44:06.574Z",
+        "updatedAt": "2023-04-03T14:44:06.574Z",
+        "roleId": 3,
+        "attachment": null,
+        "role": {
+            "id": 3,
+            "name": "DOCTOR",
+            "description": "DOCTOR",
+            "createdAt": "2023-04-03T14:44:01.190Z",
+            "updatedAt": "2023-04-03T14:44:01.190Z",
+            "roleAccessesResources": [
+                {
+                    "resourceId": 16,
+                    "roleId": 3,
+                    "canView": true,
+                    "canAdd": false,
+                    "canEdit": false,
+                    "canDelete": false,
+                    "createdAt": "2023-04-03T14:44:01.190Z",
+                    "updatedAt": "2023-04-03T14:44:01.190Z",
+                    "resource": {
+                        "id": 16,
+                        "name": "medication",
+                        "description": "medication",
+                        "createdAt": "2023-04-03T14:44:01.142Z",
+                        "updatedAt": "2023-04-03T14:44:01.142Z"
+                    }
+                },
+                {
+                    "resourceId": 11,
+                    "roleId": 3,
+                    "canView": true,
+                    "canAdd": false,
+                    "canEdit": false,
+                    "canDelete": false,
+                    "createdAt": "2023-04-03T14:44:01.190Z",
+                    "updatedAt": "2023-04-03T14:44:01.190Z",
+                    "resource": {
+                        "id": 11,
+                        "name": "patient_saves_article",
+                        "description": "patient_saves_article",
+                        "createdAt": "2023-04-03T14:44:01.132Z",
+                        "updatedAt": "2023-04-03T14:44:01.132Z"
+                    }
+                },
+                {
+                    "resourceId": 10,
+                    "roleId": 3,
+                    "canView": true,
+                    "canAdd": false,
+                    "canEdit": false,
+                    "canDelete": false,
+                    "createdAt": "2023-04-03T14:44:01.190Z",
+                    "updatedAt": "2023-04-03T14:44:01.190Z",
+                    "resource": {
+                        "id": 10,
+                        "name": "article",
+                        "description": "article",
+                        "createdAt": "2023-04-03T14:44:01.129Z",
+                        "updatedAt": "2023-04-03T14:44:01.129Z"
+                    }
+                },
+                {
+                    "resourceId": 9,
+                    "roleId": 3,
+                    "canView": true,
+                    "canAdd": false,
+                    "canEdit": false,
+                    "canDelete": false,
+                    "createdAt": "2023-04-03T14:44:01.190Z",
+                    "updatedAt": "2023-04-03T14:44:01.190Z",
+                    "resource": {
+                        "id": 9,
+                        "name": "patient_account",
+                        "description": "patient_account",
+                        "createdAt": "2023-04-03T14:44:01.127Z",
+                        "updatedAt": "2023-04-03T14:44:01.127Z"
+                    }
+                },
+                {
+                    "resourceId": 15,
+                    "roleId": 3,
+                    "canView": true,
+                    "canAdd": true,
+                    "canEdit": true,
+                    "canDelete": true,
+                    "createdAt": "2023-04-03T14:44:01.190Z",
+                    "updatedAt": "2023-04-03T14:44:01.190Z",
+                    "resource": {
+                        "id": 15,
+                        "name": "reminder_plan_includes_medication",
+                        "description": "reminder_plan_includes_medication",
+                        "createdAt": "2023-04-03T14:44:01.140Z",
+                        "updatedAt": "2023-04-03T14:44:01.140Z"
+                    }
+                },
+                {
+                    "resourceId": 14,
+                    "roleId": 3,
+                    "canView": true,
+                    "canAdd": true,
+                    "canEdit": true,
+                    "canDelete": true,
+                    "createdAt": "2023-04-03T14:44:01.190Z",
+                    "updatedAt": "2023-04-03T14:44:01.190Z",
+                    "resource": {
+                        "id": 14,
+                        "name": "reminder_plan",
+                        "description": "reminder_plan",
+                        "createdAt": "2023-04-03T14:44:01.137Z",
+                        "updatedAt": "2023-04-03T14:44:01.137Z"
+                    }
+                },
+                {
+                    "resourceId": 13,
+                    "roleId": 3,
+                    "canView": true,
+                    "canAdd": true,
+                    "canEdit": true,
+                    "canDelete": true,
+                    "createdAt": "2023-04-03T14:44:01.190Z",
+                    "updatedAt": "2023-04-03T14:44:01.190Z",
+                    "resource": {
+                        "id": 13,
+                        "name": "medication_plan",
+                        "description": "medication_plan",
+                        "createdAt": "2023-04-03T14:44:01.135Z",
+                        "updatedAt": "2023-04-03T14:44:01.135Z"
+                    }
+                },
+                {
+                    "resourceId": 8,
+                    "roleId": 3,
+                    "canView": true,
+                    "canAdd": true,
+                    "canEdit": true,
+                    "canDelete": true,
+                    "createdAt": "2023-04-03T14:44:01.190Z",
+                    "updatedAt": "2023-04-03T14:44:01.190Z",
+                    "resource": {
+                        "id": 8,
+                        "name": "doctor_manages_patient",
+                        "description": "doctor_manages_patient",
+                        "createdAt": "2023-04-03T14:44:01.125Z",
+                        "updatedAt": "2023-04-03T14:44:01.125Z"
+                    }
+                }
+            ]
+        },
+        "operatorAccount": {
+            "userAccountId": 6,
+            "username": "sample.doctor.1",
+            "phoneNumber": null,
+            "hospitalId": 1,
+            "hospital": {
+                "id": 1,
+                "name": "Tan Phu District Hospital",
+                "description": "609-611 Au Co street, Phu Trung Ward, Tan Phu District, HCMC",
+                "createdAt": "2023-04-03T14:44:01.210Z",
+                "updatedAt": "2023-04-03T14:44:01.210Z"
+            },
+            "doctorAccount": {
+                "operatorAccountId": 6,
+                "faculty": null,
+                "yearOfExperience": null,
+                "doctorManagesPatients": [],
+                "medicationPlans": [],
+                "qualifications": []
+            }
+        }
+    },
+    {
+        "id": 5,
+        "passwordHash": "$2b$15$LjVseUh5MfPMHpvxxlg9p.gQ3IR99Fy.ohFVpfUfb18pNq62G/1Za",
+        "code": "7f01325e-7d7b-40c1-ae41-81b9d6080af3",
+        "email": null,
+        "firstName": null,
+        "lastName": null,
+        "gender": null,
+        "address": null,
+        "socialSecurityNumber": null,
+        "nationality": null,
+        "birthday": null,
+        "lastActive": "2023-04-03T14:44:06.545Z",
+        "createdAt": "2023-04-03T14:44:06.545Z",
+        "updatedAt": "2023-04-03T14:44:06.545Z",
+        "roleId": 3,
+        "attachment": null,
+        "role": {
+            "id": 3,
+            "name": "DOCTOR",
+            "description": "DOCTOR",
+            "createdAt": "2023-04-03T14:44:01.190Z",
+            "updatedAt": "2023-04-03T14:44:01.190Z",
+            "roleAccessesResources": [
+                {
+                    "resourceId": 16,
+                    "roleId": 3,
+                    "canView": true,
+                    "canAdd": false,
+                    "canEdit": false,
+                    "canDelete": false,
+                    "createdAt": "2023-04-03T14:44:01.190Z",
+                    "updatedAt": "2023-04-03T14:44:01.190Z",
+                    "resource": {
+                        "id": 16,
+                        "name": "medication",
+                        "description": "medication",
+                        "createdAt": "2023-04-03T14:44:01.142Z",
+                        "updatedAt": "2023-04-03T14:44:01.142Z"
+                    }
+                },
+                {
+                    "resourceId": 11,
+                    "roleId": 3,
+                    "canView": true,
+                    "canAdd": false,
+                    "canEdit": false,
+                    "canDelete": false,
+                    "createdAt": "2023-04-03T14:44:01.190Z",
+                    "updatedAt": "2023-04-03T14:44:01.190Z",
+                    "resource": {
+                        "id": 11,
+                        "name": "patient_saves_article",
+                        "description": "patient_saves_article",
+                        "createdAt": "2023-04-03T14:44:01.132Z",
+                        "updatedAt": "2023-04-03T14:44:01.132Z"
+                    }
+                },
+                {
+                    "resourceId": 10,
+                    "roleId": 3,
+                    "canView": true,
+                    "canAdd": false,
+                    "canEdit": false,
+                    "canDelete": false,
+                    "createdAt": "2023-04-03T14:44:01.190Z",
+                    "updatedAt": "2023-04-03T14:44:01.190Z",
+                    "resource": {
+                        "id": 10,
+                        "name": "article",
+                        "description": "article",
+                        "createdAt": "2023-04-03T14:44:01.129Z",
+                        "updatedAt": "2023-04-03T14:44:01.129Z"
+                    }
+                },
+                {
+                    "resourceId": 9,
+                    "roleId": 3,
+                    "canView": true,
+                    "canAdd": false,
+                    "canEdit": false,
+                    "canDelete": false,
+                    "createdAt": "2023-04-03T14:44:01.190Z",
+                    "updatedAt": "2023-04-03T14:44:01.190Z",
+                    "resource": {
+                        "id": 9,
+                        "name": "patient_account",
+                        "description": "patient_account",
+                        "createdAt": "2023-04-03T14:44:01.127Z",
+                        "updatedAt": "2023-04-03T14:44:01.127Z"
+                    }
+                },
+                {
+                    "resourceId": 15,
+                    "roleId": 3,
+                    "canView": true,
+                    "canAdd": true,
+                    "canEdit": true,
+                    "canDelete": true,
+                    "createdAt": "2023-04-03T14:44:01.190Z",
+                    "updatedAt": "2023-04-03T14:44:01.190Z",
+                    "resource": {
+                        "id": 15,
+                        "name": "reminder_plan_includes_medication",
+                        "description": "reminder_plan_includes_medication",
+                        "createdAt": "2023-04-03T14:44:01.140Z",
+                        "updatedAt": "2023-04-03T14:44:01.140Z"
+                    }
+                },
+                {
+                    "resourceId": 14,
+                    "roleId": 3,
+                    "canView": true,
+                    "canAdd": true,
+                    "canEdit": true,
+                    "canDelete": true,
+                    "createdAt": "2023-04-03T14:44:01.190Z",
+                    "updatedAt": "2023-04-03T14:44:01.190Z",
+                    "resource": {
+                        "id": 14,
+                        "name": "reminder_plan",
+                        "description": "reminder_plan",
+                        "createdAt": "2023-04-03T14:44:01.137Z",
+                        "updatedAt": "2023-04-03T14:44:01.137Z"
+                    }
+                },
+                {
+                    "resourceId": 13,
+                    "roleId": 3,
+                    "canView": true,
+                    "canAdd": true,
+                    "canEdit": true,
+                    "canDelete": true,
+                    "createdAt": "2023-04-03T14:44:01.190Z",
+                    "updatedAt": "2023-04-03T14:44:01.190Z",
+                    "resource": {
+                        "id": 13,
+                        "name": "medication_plan",
+                        "description": "medication_plan",
+                        "createdAt": "2023-04-03T14:44:01.135Z",
+                        "updatedAt": "2023-04-03T14:44:01.135Z"
+                    }
+                },
+                {
+                    "resourceId": 8,
+                    "roleId": 3,
+                    "canView": true,
+                    "canAdd": true,
+                    "canEdit": true,
+                    "canDelete": true,
+                    "createdAt": "2023-04-03T14:44:01.190Z",
+                    "updatedAt": "2023-04-03T14:44:01.190Z",
+                    "resource": {
+                        "id": 8,
+                        "name": "doctor_manages_patient",
+                        "description": "doctor_manages_patient",
+                        "createdAt": "2023-04-03T14:44:01.125Z",
+                        "updatedAt": "2023-04-03T14:44:01.125Z"
+                    }
+                }
+            ]
+        },
+        "operatorAccount": {
+            "userAccountId": 5,
+            "username": "sample.doctor.2",
+            "phoneNumber": null,
+            "hospitalId": 2,
+            "hospital": {
+                "id": 2,
+                "name": "Perfect Hospital",
+                "description": "27 Ky Dong street, Ward 9, District 3, HCMC",
+                "createdAt": "2023-04-03T14:44:01.210Z",
+                "updatedAt": "2023-04-03T14:44:01.210Z"
+            },
+            "doctorAccount": {
+                "operatorAccountId": 5,
+                "faculty": null,
+                "yearOfExperience": null,
+                "doctorManagesPatients": [],
+                "medicationPlans": [],
+                "qualifications": []
+            }
+        }
+    }
+]
