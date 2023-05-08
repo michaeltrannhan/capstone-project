@@ -34,7 +34,7 @@ const DoctorCreate = () => {
     if (error) {
       return notify(<Alert severity="error">New doctor added</Alert>);
     }
-    redirect("list", "doctor-accounts");
+    redirect("list", "doctors");
     notify(<Alert severity="success">New doctor added</Alert>);
   };
   return (

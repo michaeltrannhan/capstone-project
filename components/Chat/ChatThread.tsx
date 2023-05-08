@@ -76,7 +76,7 @@ const ChatThread = (props: Props) => {
       console.log(error);
     }
   };
-
+  console.log(roomMessages);
   React.useEffect(() => {
     const unsubscribe = () =>
       onSnapshot(

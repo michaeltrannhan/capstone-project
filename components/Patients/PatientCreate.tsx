@@ -1,10 +1,29 @@
-import { Typography } from "@mui/material";
+import { Alert, Typography } from "@mui/material";
 import React from "react";
-import { Create, Form, TextInput } from "react-admin";
+import {
+  Create,
+  Form,
+  SaveButton,
+  TextInput,
+  useCreate,
+  useNotify,
+  useRedirect,
+} from "react-admin";
 
 type Props = {};
 
 const PatientCreate = () => {
+  const [create, { error }] = useCreate();
+  const redirect = useRedirect();
+  const notify = useNotify();
+  const patientCreate = (data: any) => {
+    create("auth/patient/register", { data });
+    if (error) {
+      return notify(<Alert severity="error">New patient added</Alert>);
+    }
+    redirect("list", "patients");
+    notify(<Alert severity="success">New patient added</Alert>);
+  };
   return (
     <Create
       redirect="list"
@@ -26,7 +45,28 @@ const PatientCreate = () => {
           padding: "24px",
         },
       }}>
-      sadasdasd
+      <Form onSubmit={patientCreate}>
+        <Typography variant="h3" align="center">
+          Create a patient account
+        </Typography>
+        <br />
+        Patient phone number
+        <TextInput
+          variant="outlined"
+          label="Phone Number"
+          source="phoneNumber"
+          fullWidth
+        />
+        Patient Password
+        <TextInput
+          variant="outlined"
+          label="Password"
+          source="password"
+          fullWidth
+          type="password"
+        />
+        <SaveButton />
+      </Form>
     </Create>
   );
 };
