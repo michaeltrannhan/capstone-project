@@ -35,7 +35,7 @@ import { useEffect, useMemo, useState } from "react";
 import MedicationPlanServices from "./MedicationPlanServices";
 import MedicationSearchBar from "./MedicationSearchBar";
 
-import { useGetIdentity } from "react-admin";
+import { useGetIdentity, useNotify } from "react-admin";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
@@ -60,16 +60,19 @@ const Prescribe = () => {
     }
   };
   const { data, isLoading, error } = useGetIdentity();
-
+  const notify = useNotify();
   const handleSubmit = async (
     values: MedicationPlanForm,
     actions: FormikHelpers<MedicationPlanForm>
   ) => {
-    console.log(JSON.stringify(values, null, 2));
+    // console.log(JSON.stringify(values, null, 2));
     try {
       const res = await MedicationPlanServices.createMedicationPlan(values);
-      console.log(res);
-      return Promise.resolve(res);
+      // console.log(res);
+      return Promise.resolve(res).then(() => {
+        notify("Created new medication plan successfully", { type: "success" });
+        actions.resetForm();
+      });
     } catch (error) {
       console.log(error);
     }

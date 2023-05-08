@@ -64,7 +64,7 @@ const ChatThread = (props: Props) => {
       const response = api
         .post<FormValues, any>(`chat/send`, data)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           setSending(false);
         })
         .catch((err) => {
@@ -76,8 +76,9 @@ const ChatThread = (props: Props) => {
       console.log(error);
     }
   };
-  console.log(roomMessages);
+  // console.log(roomMessages);
   React.useEffect(() => {
+    // console.log(collection(db, "roomMessages", props.roomId, "messages"));
     const unsubscribe = () =>
       onSnapshot(
         query(
@@ -93,9 +94,7 @@ const ChatThread = (props: Props) => {
           setRoomMessages(messages);
         }
       );
-    return () => {
-      unsubscribe();
-    };
+    return unsubscribe();
   }, [props.roomId]);
   return (
     <div>

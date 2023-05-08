@@ -46,8 +46,8 @@ export const AccountProfileChangePassword = (
   });
   const notify = useNotify();
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log(data.oldPassword);
-    console.log(data.newPassword);
+    // console.log(data.oldPassword);
+    // console.log(data.newPassword);
     try {
       setLoading(true);
       const response = api
@@ -56,7 +56,7 @@ export const AccountProfileChangePassword = (
           data
         )
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           setLoading(false);
         })
         .catch((error) => {
