@@ -12,6 +12,7 @@ import {
   TextInput,
   useCreate,
   useRedirect,
+  useGetIdentity,
 } from "react-admin";
 import { useLocation } from "react-router-dom";
 import { Role, User } from "../utils/commons";
@@ -26,6 +27,7 @@ const DoctorCreate = () => {
   api.get("");
   const hospitalID = auth.operatorAccount.hospitalId;
   console.log(hospitalID);
+  const { identity, isLoading } = useGetIdentity();
   const [create, { error }] = useCreate();
   const redirect = useRedirect();
   const notify = useNotify();
@@ -37,6 +39,7 @@ const DoctorCreate = () => {
     redirect("list", "doctors");
     notify(<Alert severity="success">New doctor added</Alert>);
   };
+  
   return (
     <Create
       redirect="list"

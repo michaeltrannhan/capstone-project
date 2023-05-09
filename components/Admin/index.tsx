@@ -77,7 +77,7 @@ import logo from "../../assets/images/logo.png";
 import ProfilePage from "../layout/Profile";
 import api from "../../services";
 import { QueryClient } from "react-query";
-const dataProvider = DataProvider("http://localhost:3000");
+const dataProvider = DataProvider("https://capstone-project-hcmut.herokuapp.com");
 
 const myDateProvider = {
   ...dataProvider,
@@ -373,12 +373,12 @@ const App = () => {
         },
       },
       RaShow: {
-        styleOverrides:{
+        styleOverrides: {
           root: {
             // marginRight: "40px",
-          }
-        }
-      }
+          },
+        },
+      },
     },
   };
 
@@ -397,16 +397,18 @@ const App = () => {
             title="MediReminder"
             layout={CustomLayout}>
             {(permissions: Role) => {
-              const filteredResources =
-                permissions.roleAccessesResources.filter(
+              const filteredResources = permissions.roleAccessesResources
+                .filter(
                   (e) =>
                     !e.resource.name.includes("manage") &&
                     !e.resource.name.includes("saves") &&
                     !e.resource.name.includes("includes") &&
                     !e.resource.name.includes("reminder_plan") &&
                     !e.resource.name.includes("attachment") &&
-                    !e.resource.name.includes("operator_account")
-                ).sort();
+                    !e.resource.name.includes("operator_account") &&
+                    !e.resource.name.includes("hospital")
+                )
+                .sort();
 
               return (
                 <>
@@ -432,8 +434,7 @@ const App = () => {
                     const createComponent =
                       getCurrentActionForResource(createName);
                     const icon = getIconFromResources(tempResourceName);
-                    
-                    
+
                     return (
                       <Resource
                         key={index}

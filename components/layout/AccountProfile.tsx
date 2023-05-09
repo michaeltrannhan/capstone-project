@@ -5,6 +5,7 @@ import {
   Card,
   CardActions,
   CardContent,
+  CircularProgress,
   Divider,
   Grid,
   TextField,
@@ -14,9 +15,11 @@ import React from "react";
 import { Profile } from "../utils/commons";
 interface AccountProfileProps {
   profile: Profile;
+  // loading: boolean;
 }
 
 export const AccountProfile = (props: AccountProfileProps) => {
+  // if (!props.profile.attachment) return <CircularProgress />;
   return (
     <Card>
       <CardContent>

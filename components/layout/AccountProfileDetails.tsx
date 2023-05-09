@@ -30,7 +30,6 @@ export const AccountProfileDetails = (props: AccountProfileDetailsProps) => {
                 <TextField
                   fullWidth
                   disabled
-                  // helperText="Please specify the first name"
                   label="First name"
                   name="firstName"
                   required

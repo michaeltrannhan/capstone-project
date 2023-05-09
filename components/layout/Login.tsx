@@ -41,6 +41,7 @@ const Login = () => {
     handleSubmit,
     control,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
@@ -53,18 +54,22 @@ const Login = () => {
   const login = useLogin();
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log(data.username);
-    console.log(data.password);
+    // console.log(data.username);
+    // console.log(data.password);
     try {
       setLoading(true);
       login({ username: data.username, password: data.password })
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           setLoading(false);
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
+          notify("Invalid email or password");
+          reset();
+          setLoading(false);
         });
+      return Promise.reject();
     } catch {
       notify("Invalid email or password");
     }

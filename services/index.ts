@@ -13,7 +13,7 @@ const onRequestSuccess = (config: AxiosRequestConfig) => {};
 
 export const getAuthorizationHeader = () => `Bearer ${getToken()}`;
 
-const apiURL = "http://localhost:3000";
+const apiURL = "https://capstone-project-hcmut.herokuapp.com";
 const api = axios.create({
   baseURL: apiURL,
   // headers: {

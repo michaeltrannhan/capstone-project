@@ -69,30 +69,79 @@ function a11yProps(index: number) {
   };
 }
 
+const initialProfile: Profile = {
+  id: 0,
+  firstName: "Loading",
+  lastName: "Loading",
+  email: "Loading",
+  address: "Loading",
+  birthday: "Loading",
+  role: {
+    id: 0,
+    name: "Loading",
+    description: "Loading",
+  },
+  attachment: {
+    filePath: "Loading",
+  },
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  gender: "Loading",
+  lastActive: "Loading",
+  nationality: "Loading",
+  passwordHash: "Loading",
+  roleId: 0,
+  code: "Loading",
+  socialSecurityNumber: "Loading",
+};
+
 const ProfilePage = () => {
   const [value, setValue] = React.useState(0);
-
+  const [initialState, setInitialState] = React.useState<Profile | null>(
+    initialProfile
+  );
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
   const { identity, isLoading } = useGetIdentity();
+  // console.log(localStorage.getItem("auth"));
+  const rawAuth = localStorage.getItem("auth");
+  const auth = JSON.parse(rawAuth ? rawAuth : "{}");
+
+  // if (isLoading) return <CircularProgress />;
   // console.log("identity", isLoading ? "loading" : identity?.code);
   const {
     isIdle,
     data: profileData,
     isLoading: profileLoading,
   } = useQuery(
-    ["profile", identity?.code],
-    () => ProfileServices.fetchProfileByUUID(identity?.code),
+    ["profile", auth.code],
+    () =>
+      ProfileServices.fetchProfileByUUID(auth.code).then((res) => {
+        setInitialState(res);
+        return res;
+      }),
     {
-      enabled: !!identity?.code,
+      enabled: !!auth.code,
       refetchOnWindowFocus: false,
     }
   );
 
   console.log("profile", profileData);
 
-  if (profileLoading) return <CircularProgress />;
+  if (profileLoading)
+    return (
+      <>
+        <Paper
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+          }}>
+          Profile is loading...
+          <CircularProgress />
+        </Paper>
+      </>
+    );
 
   return (
     <>
@@ -115,32 +164,45 @@ const ProfilePage = () => {
         </Typography>
         <Grid container columnSpacing="24px">
           <Grid xs={12} md={6} lg={4} item>
-            <AccountProfile profile={profileData as Profile} />
+            {profileLoading ? (
+              <>
+                <CircularProgress />
+              </>
+            ) : (
+              <AccountProfile
+                profile={profileData as Profile}
+                // loading={profileLoading}
+              />
+            )}
           </Grid>
           <Grid xs={12} md={6} lg={8} item>
-            <Box sx={{ borderBottom: 0, borderColor: "divider" }}>
-              <Tabs
-                value={value}
-                onChange={handleChange}
-                aria-label="basic tabs example">
-                <Tab label="Basic Information" {...a11yProps(0)} />
-                {profileData?.operatorAccount ? (
-                  <Tab label="Operator Information" {...a11yProps(1)} />
-                ) : null}
-                <Tab label="Change Password" {...a11yProps(2)} />
-              </Tabs>
-              <TabPanel value={value} index={0}>
-                <AccountProfileDetails profile={profileData as Profile} />
-              </TabPanel>
-              <TabPanel value={value} index={1}>
-                <AccountHospitalDetails profile={profileData as Profile} />
-              </TabPanel>
-              <TabPanel value={value} index={2}>
-                <AccountProfileChangePassword
-                  uuid={profileData?.code as string}
-                />
-              </TabPanel>
-            </Box>
+            {profileLoading ? (
+              <>
+                <CircularProgress />
+              </>
+            ) : (
+              <Box sx={{ borderBottom: 0, borderColor: "divider" }}>
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  aria-label="basic tabs example">
+                  <Tab label="Basic Information" {...a11yProps(0)} />
+                  {profileData?.operatorAccount ? (
+                    <Tab label="Operator Information" {...a11yProps(1)} />
+                  ) : null}
+                  <Tab label="Change Password" {...a11yProps(2)} />
+                </Tabs>
+                <TabPanel value={value} index={0}>
+                  <AccountProfileDetails profile={profileData as Profile} />
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                  <AccountHospitalDetails profile={profileData as Profile} />
+                </TabPanel>
+                <TabPanel value={value} index={2}>
+                  <AccountProfileChangePassword uuid={identity?.code} />
+                </TabPanel>
+              </Box>
+            )}
           </Grid>
         </Grid>
       </Box>
