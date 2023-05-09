@@ -54,7 +54,7 @@ const MedicationPlanList = () => {
       <List
         resource={
           permissions.name === "DOCTOR"
-            ? `medication-plans/${identity?.code}`
+            ? `medication-plans/associated-med-plans/${identity?.code}`
             : "medication-plans"
         }
         sx={{
