@@ -68,7 +68,7 @@ const Prescribe = () => {
     // console.log(JSON.stringify(values, null, 2));
     try {
       const res = await MedicationPlanServices.createMedicationPlan(values);
-      // console.log(res);
+      console.log(res);
       return Promise.resolve(res).then(() => {
         notify("Created new medication plan successfully", { type: "success" });
         actions.resetForm();

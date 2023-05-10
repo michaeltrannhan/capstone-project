@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-export const apiURL = "https://capstone-project-two-topaz.vercel.app/";
+export const apiURL = "https://capstone-project-hcmut.herokuapp.com/";
 
 export type CustomRoutes = "Prescribe" | "Chat";
 
