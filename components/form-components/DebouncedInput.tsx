@@ -14,11 +14,7 @@ export default function DebouncedInput({ onChange }: DebouncedInputProps) {
     const fetchUser = setTimeout(() => {
       if (inputValue.length > 0) {
         api
-          .get(`http://localhost:3000/patients?keyword=${inputValue}`, {
-            // headers: {
-            //   Authorization: getAuthorizationHeader(),
-            // },
-          })
+          .get(`/patients?keyword=${inputValue}`)
           .then((res) => {
             onChange(res.data.data[0]);
           })
@@ -26,7 +22,7 @@ export default function DebouncedInput({ onChange }: DebouncedInputProps) {
       }
     }, 1000);
     return () => clearTimeout(fetchUser);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue]);
   return (
     <Box sx={{ width: "100%" }}>
