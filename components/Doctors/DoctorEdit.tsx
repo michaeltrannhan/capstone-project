@@ -26,28 +26,25 @@ const DoctorEdit = () => {
       }}>
       <Form>
         <Typography variant="h3" align="center">
-          Create new doctor
+          Edit Doctor Information
         </Typography>
         <br />
-        Doctor
         <TextInput
           variant="outlined"
           label="Doctor First Name"
           source="firstName"
           fullWidth
         />
-        Doctor First Name
         <TextInput
           variant="outlined"
           label="Doctor Last Name"
           source="lastName"
           fullWidth
         />
-        Dcotor Last Name
         <TextInput
           variant="outlined"
-          label=""
-          source=""
+          label="Doctor Email"
+          source="email"
           fullWidth
         />
         <SaveButton />

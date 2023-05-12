@@ -114,7 +114,12 @@ export const AccountProfileChangePassword = (
           </CardContent>
           <Divider />
           <CardActions sx={{ justifyContent: "center" }}>
-            <Button variant="contained" type="submit">
+            <Button
+              variant="contained"
+              type="submit"
+              sx={{
+                background: "#00C2CB",
+              }}>
               {loading && <CircularProgress size={25} thickness={2} />}
               Change Password
             </Button>

@@ -49,17 +49,32 @@ export const AccountProfile = (props: AccountProfileProps) => {
               : props.profile.firstName.charAt(0).toUpperCase() +
                 props.profile.lastName.charAt(0).toUpperCase()}
           </Avatar>
-          <Typography color="magenta" variant="button">
+          <Typography
+            sx={{
+              color: "#00C2CB",
+            }}
+            variant="button">
             User ID : {props.profile.id}
           </Typography>
-          <Typography gutterBottom variant="h5">
+          <Typography
+            gutterBottom
+            sx={{
+              color: "#00C2CB",
+            }}
+            variant="h5">
             {props.profile.firstName} {props.profile.lastName}
           </Typography>
-          <Typography color="primary" variant="body1">
+          <Typography
+            sx={{
+              color: "#00C2CB",
+            }}
+            variant="body1">
             Profile Role:{" "}
             {props.profile.role.name.replace("_", " ").toUpperCase()}
           </Typography>
-          <Typography color="secondary" variant="body2">
+          <Typography
+            color={(theme) => theme.palette.success.darker}
+            variant="body2">
             UUID: {props.profile.code}
           </Typography>
         </Box>

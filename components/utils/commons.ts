@@ -108,16 +108,16 @@ export type User = {
   createdAt: string;
   updatedAt: string;
   roleId: number;
-  attachments: Attachment[];
+  attachment: Attachment;
   role: Role;
-  email?: string;
-  firstName?: string;
-  lastName?: string;
-  gender?: string;
-  address?: string;
-  socialSecurityNumber?: string;
-  nationality?: string;
-  birthday?: string;
+  email: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  gender: string | null;
+  address: string | null;
+  socialSecurityNumber: string | null;
+  nationality: string | null;
+  birthday: string | null;
   patientAccount?: PatientAccount;
   operatorAccount?: OperatorAccount;
 };
@@ -131,7 +131,13 @@ export interface MedicationType {
 
 export interface ReminderPlanTimeDTO {
   dosage: number;
-  time: string;
+  isTaken: boolean;
+  isSkipped: boolean;
+  time: Date;
+  sentAt?: Date;
+  patientAccountId: number;
+  reminderPlanMedicationPlanId: number;
+  reminderPlanMedicationId: number;
 }
 
 export enum Frequency {
@@ -150,10 +156,11 @@ export interface ReminderPlanDTO {
   startDate: Date;
   medicationID: MedicationType["id"];
   localMedicationName: MedicationType["name"];
+  medication: MedicationType;
   stock: number;
   note: string;
   endDate?: Date;
-  reminderPlanTime: Array<ReminderPlanTimeDTO>;
+  reminderPlanTimes: Array<ReminderPlanTimeDTO>;
 }
 
 export interface MedicationPlanDTO {

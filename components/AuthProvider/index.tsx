@@ -32,9 +32,9 @@ export const authProvider = {
   getIdentity: () => {
     try {
       const auth = localStorage.getItem("auth");
-      const { id, firstName, lastName, attachment, code } = JSON.parse(
-        auth || ""
-      );
+      const { id, firstName, lastName, attachment, code, operatorAccount } =
+        JSON.parse(auth || "");
+      const { hospitalId } = operatorAccount;
       const img = attachment ? attachment.filePath : null;
       const fullName = `${firstName} ${lastName}`;
       return Promise.resolve({
@@ -42,6 +42,7 @@ export const authProvider = {
         fullName: fullName,
         avatar: img ? img : null,
         code: code,
+        hospitalId: hospitalId,
       });
     } catch (error) {
       return Promise.reject(error);

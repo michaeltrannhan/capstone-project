@@ -14,6 +14,7 @@ import { Role } from "../utils/commons";
 import ListFilters from "../commons/ListFilters";
 import ListAction from "../commons/ListAction";
 import ListTitle from "../commons/ListTitle";
+import Head from "next/head";
 
 const PatientList = () => {
   const { permissions, isLoading } = usePermissions<Role, any>();
@@ -22,6 +23,9 @@ const PatientList = () => {
   } else
     return (
       <>
+        <Head>
+          <title>List of Patients</title>
+        </Head>
         <ListTitle resource="Patient" />
         {permissions.name !== "DOCTOR" ? (
           <List

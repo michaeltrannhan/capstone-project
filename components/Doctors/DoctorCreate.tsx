@@ -24,22 +24,25 @@ const DoctorCreate = () => {
   const { permissions } = usePermissions();
   const rawAuth = localStorage.getItem("auth");
   const auth = JSON.parse(rawAuth || "");
-  api.get("");
   const hospitalID = auth.operatorAccount.hospitalId;
-  console.log(hospitalID);
-  const { identity, isLoading } = useGetIdentity();
-  const [create, { error }] = useCreate();
+  const [create, { error, isLoading }] = useCreate();
   const redirect = useRedirect();
   const notify = useNotify();
   const doctorCreate = (data: any) => {
     create("auth/operator/register", { data });
     if (error) {
-      return notify(<Alert severity="error">New doctor added</Alert>);
+      return notify(
+        <Alert severity="error">
+          An <>{error}</> occured, please try again
+        </Alert>
+      );
     }
-    redirect("list", "doctors");
-    notify(<Alert severity="success">New doctor added</Alert>);
+    if (!isLoading) {
+      redirect("list", "doctors");
+      notify(<Alert severity="success">New doctor added</Alert>);
+    }
   };
-  
+
   return (
     <Create
       redirect="list"

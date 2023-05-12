@@ -47,6 +47,7 @@ import ListAction from "../commons/ListAction";
 import ActionToolbar from "../commons/ListActionToolbar";
 import ListTitle from "../commons/ListTitle";
 import ListFilters from "../commons/ListFilters";
+import Head from "next/head";
 const ArticleBulkActionButtons = () => (
   <>
     <ResetViewsButton />
@@ -60,6 +61,9 @@ const ArticleList = () => {
   const { permissions } = usePermissions();
   return (
     <>
+      <Head>
+        <title>List of Articles</title>
+      </Head>
       <ListTitle resource="Article" />
       <List
         sort={{ field: "id", order: "asc" }}

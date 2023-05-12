@@ -69,47 +69,15 @@ function a11yProps(index: number) {
   };
 }
 
-const initialProfile: Profile = {
-  id: 0,
-  firstName: "Loading",
-  lastName: "Loading",
-  email: "Loading",
-  address: "Loading",
-  birthday: "Loading",
-  role: {
-    id: 0,
-    name: "Loading",
-    description: "Loading",
-  },
-  attachment: {
-    filePath: "Loading",
-  },
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  gender: "Loading",
-  lastActive: "Loading",
-  nationality: "Loading",
-  passwordHash: "Loading",
-  roleId: 0,
-  code: "Loading",
-  socialSecurityNumber: "Loading",
-};
-
 const ProfilePage = () => {
   const [value, setValue] = React.useState(0);
-  const [initialState, setInitialState] = React.useState<Profile | null>(
-    initialProfile
-  );
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
   const { identity, isLoading } = useGetIdentity();
-  // console.log(localStorage.getItem("auth"));
   const rawAuth = localStorage.getItem("auth");
   const auth = JSON.parse(rawAuth ? rawAuth : "{}");
 
-  // if (isLoading) return <CircularProgress />;
-  // console.log("identity", isLoading ? "loading" : identity?.code);
   const {
     isIdle,
     data: profileData,
@@ -118,7 +86,6 @@ const ProfilePage = () => {
     ["profile", auth.code],
     () =>
       ProfileServices.fetchProfileByUUID(auth.code).then((res) => {
-        setInitialState(res);
         return res;
       }),
     {
@@ -127,7 +94,7 @@ const ProfilePage = () => {
     }
   );
 
-  console.log("profile", profileData);
+  // console.log("profile", profileData);
 
   if (profileLoading)
     return (
@@ -136,6 +103,8 @@ const ProfilePage = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
+            textAlign: "center",
+            alignItems: "center",
           }}>
           Profile is loading...
           <CircularProgress />
@@ -185,12 +154,39 @@ const ProfilePage = () => {
                 <Tabs
                   value={value}
                   onChange={handleChange}
+                  scrollButtons="auto"
+                  variant="scrollable"
+                  textColor="inherit"
+                  sx={{
+                    borderRadius: "20px",
+                    color: "#00C2CB",
+                    "	.MuiTabs-indicator": {
+                      background: "#00C2CB",
+                    },
+                  }}
                   aria-label="basic tabs example">
-                  <Tab label="Basic Information" {...a11yProps(0)} />
-                  {profileData?.operatorAccount ? (
-                    <Tab label="Operator Information" {...a11yProps(1)} />
-                  ) : null}
-                  <Tab label="Change Password" {...a11yProps(2)} />
+                  <Tab
+                    sx={{
+                      borderRadius: "20px",
+                      borderBottom: "",
+                    }}
+                    label="Basic Information"
+                    {...a11yProps(0)}
+                  />
+                  <Tab
+                    sx={{
+                      borderRadius: "20px",
+                    }}
+                    label="Operator Information"
+                    {...a11yProps(1)}
+                  />
+                  <Tab
+                    sx={{
+                      borderRadius: "20px",
+                    }}
+                    label="Change Password"
+                    {...a11yProps(2)}
+                  />
                 </Tabs>
                 <TabPanel value={value} index={0}>
                   <AccountProfileDetails profile={profileData as Profile} />

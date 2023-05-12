@@ -21,6 +21,7 @@ import ListAction from "../commons/ListAction";
 import ResetViewsButton from "../Articles/ResetViewsButton";
 import ListTitle from "../commons/ListTitle";
 import ListFilters from "../commons/ListFilters";
+import Head from "next/head";
 
 const MedicationPanel = () => {
   const record = useRecordContext();
@@ -63,6 +64,9 @@ const MedicationList = () => {
   const { permissions } = usePermissions();
   return (
     <>
+      <Head>
+        <title>List of Medications</title>
+      </Head>
       <ListTitle resource="Medication" />
       <List
         sx={{

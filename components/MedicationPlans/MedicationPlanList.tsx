@@ -27,6 +27,7 @@ import ListAction from "../commons/ListAction";
 import ListFilters from "../commons/ListFilters";
 import ActionToolbar from "../commons/ListActionToolbar";
 import ListTitle from "../commons/ListTitle";
+import Head from "next/head";
 type Props = {};
 
 const listFilter = [
@@ -50,6 +51,9 @@ const MedicationPlanList = () => {
   if (isLoading) return <CircularProgress />;
   return (
     <>
+      <Head>
+        <title>List of Medication Plans</title>
+      </Head>
       <ListTitle resource="Medication Plan" />
       <List
         resource={

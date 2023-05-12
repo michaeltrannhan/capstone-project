@@ -34,7 +34,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const CustomLogoutButton = (props: LogoutProps) => {
   return (
-    <Logout {...props} icon={<FontAwesomeIcon icon={faSignOut} size="lg" />} />
+    <Logout
+      {...props}
+      icon={<FontAwesomeIcon icon={faSignOut} color="#00C2CB" size="lg" />}
+    />
   );
 };
 
@@ -53,8 +56,18 @@ const CustomAppBar = (props: AppBarProps) => {
         background: "#F9FAFB",
       }}
       userMenu={
-        <UserMenu >
+        <UserMenu>
           <MenuItemLink
+            sx={{
+              borderRadius: "20px 0px 0px 20px",
+              "&.RaMenuItemLink-active": {
+                border: "none",
+                backgroundColor: "white",
+              },
+              "& .RaMenuItemLink-icon": {
+                color: "#00C2CB",
+              },
+            }}
             to="/profile"
             primaryText="Profile"
             leftIcon={<FontAwesomeIcon icon={faUser} size="lg" />}

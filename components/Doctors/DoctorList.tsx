@@ -25,6 +25,7 @@ import ListFilters from "../commons/ListFilters";
 import ActionToolbar from "../commons/ListActionToolbar";
 import ListAction from "../commons/ListAction";
 import ListTitle from "../commons/ListTitle";
+import Head from "next/head";
 const DoctorList = () => {
   const { permissions } = usePermissions<Role, any>();
 
@@ -46,6 +47,9 @@ const DoctorList = () => {
 
   return (
     <>
+      <Head>
+        <title>List of Doctors</title>
+      </Head>
       <ListTitle resource="Doctor" />
       <List
         sx={{
@@ -169,11 +173,7 @@ const DoctorList = () => {
           />
           <DateField source="createdAt" />
           <DateField source="updatedAt" />
-          <UrlField
-            source="attachment.filePath"
-            title="Image file path"
-            sortable={false}
-          />
+
           <ActionToolbar>
             {permissions.name === "ADMIN" ||
             permissions.name === "HOSPITAL_ADMIN" ? (
@@ -187,7 +187,6 @@ const DoctorList = () => {
             ) : null}
             <ShowButton variant="text" />
           </ActionToolbar>
-          <ShowButton variant="text" />
         </Datagrid>
       </List>
     </>

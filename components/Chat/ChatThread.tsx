@@ -51,7 +51,7 @@ const ChatThread = (props: Props) => {
   const { handleSubmit, control, setValue, reset } = useForm({
     defaultValues: {
       content: "",
-      senderId: props.doctorId,
+      senderCode: props.doctorId,
       roomId: props.roomId,
     },
   });
@@ -59,7 +59,7 @@ const ChatThread = (props: Props) => {
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     try {
       setSending(true);
-      setValue("senderId", props.doctorId);
+      setValue("senderCode", props.doctorId);
       setValue("roomId", props.roomId);
       const response = api
         .post<FormValues, any>(`chat/send`, data)
@@ -132,6 +132,6 @@ const ChatThread = (props: Props) => {
 export default ChatThread;
 export type FormValues = {
   content: string;
-  senderId: string;
+  senderCode: string;
   roomId: string;
 };
