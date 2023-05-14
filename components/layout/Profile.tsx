@@ -74,7 +74,6 @@ const ProfilePage = () => {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  const { identity, isLoading } = useGetIdentity();
   const rawAuth = localStorage.getItem("auth");
   const auth = JSON.parse(rawAuth ? rawAuth : "{}");
 
@@ -93,8 +92,6 @@ const ProfilePage = () => {
       refetchOnWindowFocus: false,
     }
   );
-
-  // console.log("profile", profileData);
 
   if (profileLoading)
     return (
@@ -121,15 +118,16 @@ const ProfilePage = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
+          py: 2,
           px: 4,
         }}>
         <Typography
-          variant="h4"
+          variant="h2"
+          fontWeight="700"
           sx={{
             mb: 8,
           }}>
-          Profile
+          Profile information
         </Typography>
         <Grid container columnSpacing="24px">
           <Grid xs={12} md={6} lg={4} item>
@@ -138,10 +136,7 @@ const ProfilePage = () => {
                 <CircularProgress />
               </>
             ) : (
-              <AccountProfile
-                profile={profileData as Profile}
-                // loading={profileLoading}
-              />
+              <AccountProfile profile={profileData as Profile} />
             )}
           </Grid>
           <Grid xs={12} md={6} lg={8} item>
@@ -173,29 +168,21 @@ const ProfilePage = () => {
                     label="Basic Information"
                     {...a11yProps(0)}
                   />
-                  <Tab
-                    sx={{
-                      borderRadius: "20px",
-                    }}
-                    label="Operator Information"
-                    {...a11yProps(1)}
-                  />
+
                   <Tab
                     sx={{
                       borderRadius: "20px",
                     }}
                     label="Change Password"
-                    {...a11yProps(2)}
+                    {...a11yProps(1)}
                   />
                 </Tabs>
                 <TabPanel value={value} index={0}>
                   <AccountProfileDetails profile={profileData as Profile} />
                 </TabPanel>
+
                 <TabPanel value={value} index={1}>
-                  <AccountHospitalDetails profile={profileData as Profile} />
-                </TabPanel>
-                <TabPanel value={value} index={2}>
-                  <AccountProfileChangePassword uuid={identity?.code} />
+                  <AccountProfileChangePassword uuid={auth.code} />
                 </TabPanel>
               </Box>
             )}

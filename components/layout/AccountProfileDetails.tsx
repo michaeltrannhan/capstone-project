@@ -116,6 +116,40 @@ export const AccountProfileDetails = (props: AccountProfileDetailsProps) => {
           </Box>
         </CardContent>
       </Card>
+      <Card>
+        <CardHeader subheader="Hospital information" title="Operator information" />
+        <CardContent sx={{ pt: 0 }}>
+          <Box sx={{ m: 1.5 }}>
+            <Grid container spacing={3}>
+              <Grid xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Hospital ID"
+                  name="hospitalID"
+                  disabled
+                  value={
+                    props.profile.operatorAccount?.hospitalId
+                      ? props.profile.operatorAccount?.hospitalId
+                      : "Undefined"
+                  }
+                />
+              </Grid>
+              <Grid xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Username"
+                  disabled
+                  value={
+                    props.profile.operatorAccount?.username
+                      ? props.profile.operatorAccount?.username
+                      : "Undefined"
+                  }
+                />
+              </Grid>
+            </Grid>
+          </Box>
+        </CardContent>
+      </Card>
     </>
   );
 };

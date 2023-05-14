@@ -41,7 +41,7 @@ const PatientShow = () => {
             padding: "20px",
           },
         }}>
-        {/* <Card>
+        <Card>
           <CardHeader
             avatar={
               <WithRecord
@@ -109,7 +109,7 @@ const PatientShow = () => {
               color="primary"
               paddingLeft={1}
               marginBottom={2}>
-              About the doctor:
+              About the patient:
             </Typography>
             <Grid container spacing={4} paddingLeft={4} marginBottom={4}>
               <Grid item container md={6} sm={12}>
@@ -320,7 +320,7 @@ const PatientShow = () => {
                   />
                 </Grid>
               </Grid>
-              <Grid item container sm={12} md={6}>
+              {/* <Grid item container sm={12} md={6}>
                 <Grid item xs={4}>
                   Associated Doctors:
                 </Grid>
@@ -339,16 +339,16 @@ const PatientShow = () => {
                     }}
                   />
                 </Grid>
-              </Grid>
+              </Grid> */}
             </Grid>
-            <Typography
+            {/* <Typography
               variant="h4"
               color="primary"
               paddingLeft={1}
               marginBottom={4}>
               Associated Patients:
-            </Typography>
-            <Grid container spacing={4} paddingLeft={4}>
+            </Typography> */}
+            {/* <Grid container spacing={4} paddingLeft={4}>
               <Grid item container md={6} sm={12}>
                 <Grid item xs={4}>
                   Doctor Username:
@@ -425,19 +425,19 @@ const PatientShow = () => {
                   />
                 </Grid>
               </Grid>
-            </Grid>
+            </Grid> */}
           </CardContent>
           <CardActionArea
             sx={{
               textAlign: "center",
             }}></CardActionArea>
-        </Card> */}
-        <SimpleShowLayout>
+        </Card>
+        {/* <SimpleShowLayout>
           <TextField source="id" />
           <TextField source="firstName" />
           <TextField source="lastName" />
           <TextField source="email" />
-        </SimpleShowLayout>
+        </SimpleShowLayout> */}
       </Show>
     </>
   );

@@ -7,8 +7,27 @@ import { useGetIdentity } from "react-admin";
 import { useQuery } from "react-query";
 import api from "../../services";
 import Head from "next/head";
-import { Box, Card, Grid, Tabs, Typography, Tab } from "@mui/material";
+import {
+  Box,
+  Card,
+  Grid,
+  Tabs,
+  Typography,
+  Tab,
+  Button,
+  Modal,
+  Avatar,
+  Divider,
+  TextField,
+  Fab,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Paper,
+} from "@mui/material";
 import ChatThread from "./ChatThread";
+import SendIcon from "@mui/icons-material/Send";
 
 // const colRef = collection(db, "rooms");
 
@@ -23,6 +42,7 @@ interface ChatRoom {
   members: string[];
   createdAt: Date;
   createdBy: string;
+  name: string;
   recentMessages: {
     readBy: {
       sentAt: Date;
@@ -47,8 +67,9 @@ function TabPanel(props: TabPanelProps) {
       hidden={value !== index}
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
+      style={{ height: "100%" }}
       {...other}>
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box sx={{ p: 3, height: "100%" }}>{children}</Box>}
     </div>
   );
 }
@@ -62,6 +83,9 @@ function a11yProps(index: number) {
 
 const Chat = () => {
   const [value, setValue] = React.useState(0);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -85,23 +109,7 @@ const Chat = () => {
     }
   );
 
-  // const {
-  //   data: chatMessages,
-  //   isLoading: chatMessagesLoading,
-  //   isError: chatMessagesError,
-  // } = useQuery(["chat/messags"], () => {
-  //   return api.get(`chat/messages/${chatData}`)
-  // });
-  console.log("chatData", chatData);
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      roomId: "",
-    },
-  });
+  // console.log("chatData", chatData);
 
   if (chatLoading) return <div>Loading...</div>;
   return (
@@ -113,26 +121,26 @@ const Chat = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
-          // px: 4,
+          py: 6,
+          paddingX: 4,
         }}>
-        <Typography
-          variant="h4"
-          sx={
-            {
-              // mb: 8,
-            }
-          }>
-          Chat
-        </Typography>
+        <Typography variant="h4">Chat</Typography>
 
-        <Grid container columnSpacing={1}>
+        <Grid
+          container
+          height="100%"
+          component={Paper}
+          elevation={3}
+          sx={{
+            height: "100%",
+          }}>
           <Grid item xs={12} md={6} lg={2}>
             <Box
               sx={{
                 borderBottom: 1,
                 borderColor: "divider",
                 boxShadow: "-moz-initial",
+                height: "100%",
               }}>
               <Tabs
                 orientation="vertical"
@@ -140,14 +148,16 @@ const Chat = () => {
                 value={value}
                 onChange={handleChange}
                 aria-label="Vertical tabs example"
-                sx={{ borderRight: 1, borderColor: "divider", width: "100%" }}>
-                {/* <Tab label="Chat1" {...a11yProps(0)} />
-
-              <Tab label="chat2" {...a11yProps(1)} /> */}
+                sx={{
+                  borderRight: 1,
+                  borderColor: "divider",
+                  width: "100%",
+                  height: "100%",
+                }}>
                 {chatData?.map((chat, index) => (
                   <Tab
                     key={chat.id}
-                    label={`Conversation ${chat.id}`}
+                    label={`${chat.name} Medication plan`}
                     {...a11yProps(index)}
                   />
                 ))}

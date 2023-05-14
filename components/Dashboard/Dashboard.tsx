@@ -29,7 +29,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGetIdentity, usePermissions } from "react-admin";
-
+import InfoIcon from "@mui/icons-material/Info";
 type PerDay = {
   lastActive: string;
   count: number;
@@ -196,10 +196,15 @@ export default function Dashboard() {
                         </TableCell>
                         <TableCell align="center">
                           <Button
-                            variant="contained"
+                            variant="text"
                             color="primary"
-                            aria-label="table-button"
-                          />
+                            aria-label="table-button">
+                            <InfoIcon
+                              sx={{
+                                color: "#00C2CB",
+                              }}
+                            />
+                          </Button>
                         </TableCell>
                       </TableRow>
                     )

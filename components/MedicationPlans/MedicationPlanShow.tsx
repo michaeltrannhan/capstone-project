@@ -35,6 +35,8 @@ type Props = {};
 
 const MedicationPlanShow = () => {
   const { permissions, isLoading } = usePermissions<Role>();
+  const rawAuth = localStorage.getItem("auth");
+  const auth = JSON.parse(rawAuth ? rawAuth : "{}");
   if (isLoading)
     return (
       <Box>
@@ -44,9 +46,15 @@ const MedicationPlanShow = () => {
   return (
     <>
       <Head>
-        <title>Medication Detail</title>
+        <title>Medication Plan Detail</title>
       </Head>
       <Show
+        resource={
+          // permissions.name === "ADMIN" || permissions.name === "HOSPITAL_ADMIN"
+          //   ? "medication-plans"
+          //   : `medication-plans/associated-med-plans/${auth?.code}`
+          "medication-plans"
+        }
         title="Medication Plan Detail"
         actions={
           permissions.name === "ADMIN" ? (
@@ -129,11 +137,12 @@ const MedicationPlanShow = () => {
                 </Typography>
               </Grid>
               <Grid item xs={8}>
-                <ReferenceField
+                {/* <ReferenceField
                   source="doctorAccountId"
                   reference="doctors"
                   link="show"
-                />
+                /> */}
+                <TextField source="doctorAccountId" />
               </Grid>
             </Grid>
             <Grid item container md={6} xs={12}>

@@ -79,7 +79,7 @@ const StatsCard = (props: Props) => {
         {props.total ? props.total : "Undefined"}
       </Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-        {props.title} available
+        {props.title.toUpperCase()} AVAILABLE
       </Typography>
       <CardActions
         onClick={() => redirect("list", props.title)}

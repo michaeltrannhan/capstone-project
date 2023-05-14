@@ -77,7 +77,9 @@ import logo from "../../assets/images/logo.png";
 import ProfilePage from "../layout/Profile";
 import api from "../../services";
 import { QueryClient } from "react-query";
-const dataProvider = DataProvider("https://capstone-project-hcmut.herokuapp.com");
+const dataProvider = DataProvider(
+  "https://capstone-project-hcmut.herokuapp.com"
+);
 
 const myDateProvider = {
   ...dataProvider,

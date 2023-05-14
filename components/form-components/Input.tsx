@@ -39,13 +39,20 @@ const Input: FC<InputProps> = ({
         onChange={onChange(name)}
         label={label}
         type="number"
+        inputProps={{
+          style: {
+            height: "2.5rem",
+          },
+        }}
         onBlur={() => {
           setIsFocused(false);
           // console.log("OnBlur", name);
           onBlur(name);
         }}
         autoFocus={true}></TextField>
-      {showErrorState && <ErrorMessage name={name as string} component={TextError} />}
+      {showErrorState && (
+        <ErrorMessage name={name as string} component={TextError} />
+      )}
     </div>
     // </Grid>
   );

@@ -1,7 +1,5 @@
 import * as React from "react";
 import { useState } from "react";
-import PropTypes from "prop-types";
-
 import {
   Avatar,
   Button,
@@ -18,11 +16,9 @@ import LockIcon from "@mui/icons-material/Lock";
 import ClearIcon from "@mui/icons-material/Clear";
 import {
   useForm,
-  useFormState,
   Controller,
   SubmitHandler,
 } from "react-hook-form";
-import { DevTool } from "@hookform/devtools";
 
 import Box from "@mui/material/Box";
 import logo from "../../assets/images/logo.png";
@@ -54,17 +50,13 @@ const Login = () => {
   const login = useLogin();
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    // console.log(data.username);
-    // console.log(data.password);
     try {
       setLoading(true);
       login({ username: data.username, password: data.password })
         .then((response) => {
-          // console.log(response);
           setLoading(false);
         })
         .catch((error) => {
-          // console.log(error);
           notify("Invalid email or password");
           reset();
           setLoading(false);
@@ -81,10 +73,8 @@ const Login = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            // minHeight: "100vh",
             alignItems: "center",
             justifyContent: "flex-start",
-            // minWidth: "75vw",
             background: "white",
             backgroundSize: "cover",
           }}>
@@ -116,7 +106,6 @@ const Login = () => {
                 marginTop: "1em",
                 display: "flex",
                 justifyContent: "center",
-                // color: "#000",
               }}>
               <Typography variant="h4" fontWeight="700">
                 Sign In
@@ -214,20 +203,12 @@ const Login = () => {
                 Sign In
               </Button>
             </CardActions>
-            <CardActions sx={{ padding: "0 1em 1em 1em" }}>
-              Don&apos;t have an account? Sign up here
-            </CardActions>
           </Card>
         </Box>
       </form>
-      <DevTool control={control} /> {/* set up the dev tool */}
     </>
   );
 };
 
-Login.propTypes = {
-  authProvider: PropTypes.func,
-  previousRoute: PropTypes.string,
-};
 
 export default Login;

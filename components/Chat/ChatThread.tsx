@@ -8,10 +8,14 @@ import {
   Button,
   TextField,
   Typography,
+  Chip,
+  Grid,
+  InputAdornment,
 } from "@mui/material";
 import api from "../../services";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-
+import SendIcon from "@mui/icons-material/Send";
+import { type } from "os";
 import {
   query,
   collection,
@@ -25,6 +29,7 @@ import {
   QuerySnapshot,
 } from "firebase/firestore";
 import db from "../../services/firebaseConfig";
+import dayjs from "dayjs";
 
 type RoomMessages = {
   messages: Messages[];
@@ -47,7 +52,8 @@ type Props = {
 const ChatThread = (props: Props) => {
   const [sending, setSending] = React.useState<boolean>(false);
   const [roomMessages, setRoomMessages] = React.useState<DocumentData[]>([]);
-
+  const rawAuth = localStorage.getItem("auth");
+  const auth = JSON.parse(rawAuth ? rawAuth : "{}");
   const { handleSubmit, control, setValue, reset } = useForm({
     defaultValues: {
       content: "",
@@ -97,35 +103,80 @@ const ChatThread = (props: Props) => {
     return unsubscribe();
   }, [props.roomId]);
   return (
-    <div>
-      {roomMessages.map((message) => (
-        <Box key={message.id}>
-          <Typography variant="button" key={message.id}>
-            {message.sender}
-          </Typography>
-          <br />
-          {message.content}
-        </Box>
-      ))}
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          name="content"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
+    <Grid
+      container
+      sx={{
+        height: "inherit",
+        alignContent: "flex-end",
+      }}>
+      <Grid item xs={12} sx={{}}>
+        {roomMessages.map((message) => (
+          <Box
+            key={message.id}
+            textAlign={
+              message.senderCode === auth.code || message.senderId === auth.code
+                ? "end"
+                : "start"
+            }>
+            <Typography variant="caption" fontWeight={700} key={message.id}>
+              {message.sender
+                .split(" ")
+                .map((word: string) => {
+                  return word[0].toUpperCase() + word.substring(1);
+                })
+                .join(" ")}
+            </Typography>
+            <br />
+            <Chip label={message.content} />
+            <br />
+            <Typography variant="caption">
+              Sent at {dayjs(message.senAt).format("HH:MM DD/MM/YYYY")}
+            </Typography>
+          </Box>
+        ))}
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        sx={{
+          bottom: 0,
+          alignSelf: "end",
+        }}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Grid item xs={12}>
+            <Controller
               name="content"
-              label="Send Message"
-              fullWidth
-              variant="outlined"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  name="content"
+                  label="Send Message"
+                  size="medium"
+                  fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <Button
+                          sx={{
+                            padding: 0,
+                            minWidth: "auto",
+                            justifyContent: "end",
+                          }}
+                          type="submit">
+                          <SendIcon />
+                        </Button>
+                      </InputAdornment>
+                    ),
+                  }}
+                  variant="outlined"
+                />
+              )}
             />
-          )}
-        />
-        <Button type="submit" variant="contained">
-          Send
-        </Button>
-      </form>
-    </div>
+          </Grid>
+        </form>
+      </Grid>
+    </Grid>
   );
 };
 

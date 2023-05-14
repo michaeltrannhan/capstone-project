@@ -5,6 +5,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Grid,
 } from "@mui/material";
 
 type MultipleSelectOptions = {
@@ -38,7 +39,7 @@ export default function MultipleSelect({
     onChange(currentValue);
   };
   return (
-    <div>
+    <Grid container marginTop={-1.8}>
       <InputLabel id="multi-select">{label}</InputLabel>
       <Select
         labelId="multi-select"
@@ -53,6 +54,6 @@ export default function MultipleSelect({
           </MenuItem>
         ))}
       </Select>
-    </div>
+    </Grid>
   );
 }

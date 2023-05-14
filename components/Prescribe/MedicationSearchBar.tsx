@@ -10,8 +10,6 @@ import {
   Grid,
   CircularProgress,
 } from "@mui/material";
-import { debounce } from "@mui/material/utils";
-import useDebounce from "../utils/useDebounce";
 import {
   clearMedication,
   fetchMedication,
@@ -19,22 +17,6 @@ import {
 } from "../../hooks/slices/medications";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { Medication } from "../utils/commons";
-
-// function useDebounce(value: string, delay: number, initialValue: string) {
-//   const [state, setState] = useState<string>(initialValue);
-
-//   useEffect(() => {
-//     console.log("delaying", value);
-//     const timer = setTimeout(() => setState(value), delay);
-
-//     // clear timeout should the value change while already debouncing
-//     return () => {
-//       clearTimeout(timer);
-//     };
-//   }, [value, delay]);
-
-//   return state;
-// }
 
 const MedicationSearchBar = ({ onChange }: any) => {
   const dispatch = useAppDispatch();
@@ -46,13 +28,13 @@ const MedicationSearchBar = ({ onChange }: any) => {
       if (inputValue.length > 0) {
         dispatch(fetchMedication({ keyword: inputValue }));
       }
-    }, 1300);
+    }, 500);
 
     return () => {
       dispatch(clearMedication());
       clearTimeout(fetch);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue]);
 
   return (
@@ -65,14 +47,12 @@ const MedicationSearchBar = ({ onChange }: any) => {
         noOptionsText="No Medication Found"
         onInputChange={(event: React.SyntheticEvent, newInputValue: string) => {
           setInputValue(newInputValue);
-          // debouncedValue(newInputValue);
         }}
         getOptionLabel={(options) =>
           typeof options.name === "string" ? options.name : ""
         }
         disableClearable
         selectOnFocus
-        // freeSolo
         options={medications}
         isOptionEqualToValue={(option, value) => option.id === value.id}
         filterOptions={(x) => x}

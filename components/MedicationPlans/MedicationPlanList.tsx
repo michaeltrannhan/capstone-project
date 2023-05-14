@@ -21,6 +21,11 @@ import {
   TextInput,
   usePermissions,
   useGetIdentity,
+  DateField,
+  BooleanField,
+  useRedirect,
+  Button,
+  WithRecord,
 } from "react-admin";
 import { MedicationPlan, Role } from "../utils/commons";
 import ListAction from "../commons/ListAction";
@@ -28,6 +33,7 @@ import ListFilters from "../commons/ListFilters";
 import ActionToolbar from "../commons/ListActionToolbar";
 import ListTitle from "../commons/ListTitle";
 import Head from "next/head";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 type Props = {};
 
 const listFilter = [
@@ -48,6 +54,7 @@ const listFilter = [
 const MedicationPlanList = () => {
   const { permissions } = usePermissions<Role, any>();
   const { identity, isLoading } = useGetIdentity();
+  const redirect = useRedirect();
   if (isLoading) return <CircularProgress />;
   return (
     <>
@@ -139,9 +146,15 @@ const MedicationPlanList = () => {
           }}>
           <TextField source="id" />
           <TextField source="name" />
+          {/* <ReferenceField
+            source="doctorAccountId"
+            reference="doctors"
+            link="show"
+          /> */}
           <TextField source="patientAccountId" />
-          <TextField source="createdAt" />
-          <TextField source="updatedAt" />
+          <DateField source="createdAt" />
+          <DateField source="updatedAt" />
+          <BooleanField source="completed" sortable={false} />
           <ActionToolbar>
             {permissions.name === "ADMIN" ||
             permissions.name === "HOSPITAL_ADMIN" ? (
@@ -155,6 +168,19 @@ const MedicationPlanList = () => {
             ) : null}
             <ShowButton variant="text" />
           </ActionToolbar>
+          <WithRecord
+            render={(record) => {
+              return (
+                <Button
+                  label="Show"
+                  onClick={() =>
+                    redirect("show", "medication-plans", record.id)
+                  }
+                  variant="text"
+                />
+              );
+            }}
+          />
         </Datagrid>
       </List>
     </>

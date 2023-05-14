@@ -3,7 +3,7 @@ import React from "react";
 type Props = {};
 
 const MedicationPlanEdit = () => {
-  return <div>MedicationPlanEdit</div>;
+  return <div>show</div>;
 };
 
 export default MedicationPlanEdit;

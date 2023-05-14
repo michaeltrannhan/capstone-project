@@ -13,12 +13,45 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Profile } from "../utils/commons";
+import { type } from "os";
+import api, { getAuthorizationHeader } from "../../services";
+
+import axios from "axios";
+import { useNotify } from "react-admin";
 interface AccountProfileProps {
   profile: Profile;
   // loading: boolean;
 }
 
 export const AccountProfile = (props: AccountProfileProps) => {
+  const [imageToUpload, setImageToUpload] = React.useState<File | null>(null);
+  const [selectedImage, setSelectedImage] = React.useState<string>(
+    props.profile.attachment?.filePath ? props.profile.attachment.filePath : ""
+  );
+  const notify = useNotify();
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImageToUpload(e.target.files[0]);
+      setSelectedImage(URL.createObjectURL(e.target.files[0]));
+      const formData = new FormData();
+      formData.append("file", e.target.files[0]);
+      api
+        .post(`attachments/upload/${props.profile.id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          notify("Profile picture updated", { type: "success" });
+        })
+        .catch((err) => {
+          notify("Profile picture update failed", { type: "error" });
+        });
+    }
+  };
+  React.useEffect(() => {
+    return () => URL.revokeObjectURL(selectedImage);
+  }, [selectedImage]);
   // if (!props.profile.attachment) return <CircularProgress />;
   return (
     <Card>
@@ -30,15 +63,11 @@ export const AccountProfile = (props: AccountProfileProps) => {
             flexDirection: "column",
           }}>
           <Avatar
-            src={
-              props.profile.attachment?.filePath
-                ? props.profile.attachment.filePath
-                : ""
-            }
+            src={selectedImage}
             sx={{
-              height: 120,
+              height: 240,
               mb: 2,
-              width: 120,
+              width: 240,
               borderRadius: props.profile.attachment?.filePath ? "20px" : "50%",
             }}
             variant={
@@ -49,6 +78,7 @@ export const AccountProfile = (props: AccountProfileProps) => {
               : props.profile.firstName.charAt(0).toUpperCase() +
                 props.profile.lastName.charAt(0).toUpperCase()}
           </Avatar>
+
           <Typography
             sx={{
               color: "#00C2CB",
@@ -81,9 +111,25 @@ export const AccountProfile = (props: AccountProfileProps) => {
       </CardContent>
       <Divider />
       <CardActions>
-        <Button fullWidth variant="text">
-          Upload picture
-        </Button>
+        <input
+          aria-label="upload picture"
+          accept="image/*"
+          type="file"
+          name="file"
+          onChange={handleImageChange}
+        />
+        {/* <Button
+          type="submit"
+          sx={{
+            color: "#00C2CB",
+            textAlign: "center",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          fullWidth
+          aria-label="upload-button">
+          Submit
+        </Button> */}
       </CardActions>
     </Card>
   );
