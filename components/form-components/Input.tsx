@@ -6,6 +6,7 @@ import TextError from "./TextError";
 import { bool } from "yup";
 type InputProps = {
   name: number | string;
+  value: number;
   touched?: boolean;
   label: string;
   error?: string;
@@ -19,6 +20,7 @@ type InputProps = {
 
 const Input: FC<InputProps> = ({
   name,
+  value,
   touched,
   label,
   error,
@@ -39,6 +41,7 @@ const Input: FC<InputProps> = ({
         onChange={onChange(name)}
         label={label}
         type="number"
+        value={value}
         inputProps={{
           style: {
             height: "2.5rem",

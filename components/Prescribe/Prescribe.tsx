@@ -57,12 +57,16 @@ import Head from "next/head";
 import style from "styled-jsx/style";
 import dayjs from "dayjs";
 import CheckInteractions from "./CheckInteractions";
+import CustomModal from "./Modal";
 
 const Prescribe = () => {
   const [currentMedication, setCurrentMedication] = useState<Medication | null>(
     null
   );
   const [currentImage, setCurrentImage] = useState<string>("");
+  const [openPlan, setOpenPlan] = useState<boolean>(false);
+  const handlePlanOpen = () => setOpenPlan(true);
+  const handlePlanClose = () => setOpenPlan(false);
   const [open, setOpen] = useState(false);
   const handleModalOpen = () => {
     setOpen(true);
@@ -417,9 +421,12 @@ const Prescribe = () => {
                           <IconButton
                             edge="start"
                             aria-label="edit"
-                            onClick={() => {
-                              alert(JSON.stringify(reminderPlan, null, 2));
-                            }}
+                            onClick={
+                              //   () => {
+                              //   alert(JSON.stringify(reminderPlan, null, 2));
+                              // }
+                              handlePlanOpen
+                            }
                             sx={{
                               "&:hover": {
                                 color: "primary.main",
@@ -457,7 +464,180 @@ const Prescribe = () => {
                       </Typography>
                     </ListItemText>
                   </ListItem>
-                  <Grid container spacing={4}>
+                  <CustomModal
+                    open={openPlan}
+                    handleClose={handlePlanClose}
+                    medicationName={reminderPlan.medicationName}>
+                    <Grid container spacing={4}>
+                      <Grid item xs={6}>
+                        <DatePicker
+                          label="Start Date"
+                          value={formik.values.reminderPlans[index].startDate}
+                          onChange={(date) => {
+                            handleStartDateChange(index)(date);
+                          }}
+                          renderInput={(props) => (
+                            <TextField variant="outlined" {...props} />
+                          )}
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <DatePicker
+                          label="End Date"
+                          value={formik.values.reminderPlans[index].endDate}
+                          onChange={(date) => {
+                            handleEndDateChange(index)(date);
+                          }}
+                          renderInput={(props) => (
+                            <TextField variant="outlined" {...props} />
+                          )}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid
+                      item
+                      container
+                      xs={12}
+                      columnSpacing={2}
+                      rowSpacing={2}>
+                      <Grid item xs={12} md={2}>
+                        <InputLabel id="frequency-select">Frequency</InputLabel>
+                        <Select
+                          fullWidth
+                          labelId="frequency-select"
+                          // defaultValue={formik.values.reminderPlans[index].frequency}
+                          value={formik.values.reminderPlans[index].frequency}
+                          onChange={(e) => {
+                            handleSelectFrequency(index)(
+                              e.target.value as Frequency
+                            );
+                          }}>
+                          {FrequencyOptions.map((frequency, index) => (
+                            <MenuItem key={index} value={frequency.value}>
+                              {frequency.label}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </Grid>
+                      <Grid item xs={12} md={8} marginTop={1.8}>
+                        {reminderPlan.frequency === Frequency.INTERVAL ? (
+                          <>
+                            <Input
+                              name={`reminderPlans[${index}].interval`}
+                              value={reminderPlan.interval}
+                              label="What is the interval?"
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                              variant="outlined"
+                              sx={{ width: "100%" }}
+                            />
+                          </>
+                        ) : reminderPlan.frequency ===
+                          Frequency.SELECTED_DAYS ? (
+                          <>
+                            <MultipleSelect
+                              label="What days in a week?"
+                              options={DaysOfWeekOptions}
+                              onChange={handleMultiSelectChange(index)}
+                            />
+                          </>
+                        ) : null}
+                      </Grid>
+                      <Grid item xs={12} md={2}>
+                        <InputLabel id="times-per-day">
+                          How many times to take each day?
+                        </InputLabel>
+                        <Select
+                          fullWidth
+                          labelId="times-per-day"
+                          defaultValue={1}
+                          onChange={(newValue) => {
+                            handleAddReminderPlanTime(index)(
+                              newValue.target.value as number
+                            );
+                          }}>
+                          {Array.from(Array(10).keys()).map((number) => (
+                            <MenuItem key={number} value={number}>
+                              {number}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </Grid>
+                    </Grid>
+
+                    <Divider sx={{ p: "10px", width: "100%" }} />
+
+                    {formik.values.reminderPlans[index].reminderPlanTimes
+                      .length > 0 && (
+                      <>
+                        {formik.values.reminderPlans[
+                          index
+                        ].reminderPlanTimes.map(
+                          (reminderPlanTime, reminderPlanTimeIndex) => (
+                            <Grid
+                              container
+                              key={reminderPlanTimeIndex}
+                              columnSpacing={2}
+                              direction="row">
+                              <Grid item xs={6} md={3}>
+                                <InputLabel id="dosage">Dosage</InputLabel>
+                                <Select
+                                  fullWidth
+                                  labelId="dosage"
+                                  // defaultValue={0}
+                                  value={
+                                    formik.values.reminderPlans[index]
+                                      .reminderPlanTimes[reminderPlanTimeIndex]
+                                      .dosage
+                                  }
+                                  onChange={(newValue) => {
+                                    handleChangeDosage(
+                                      index,
+                                      reminderPlanTimeIndex
+                                    )(newValue.target.value as number);
+                                  }}>
+                                  {Array.from(Array(10).keys()).map(
+                                    (number) => (
+                                      <MenuItem key={number} value={number}>
+                                        {number}
+                                      </MenuItem>
+                                    )
+                                  )}
+                                </Select>
+                              </Grid>
+                              <Grid item xs={6} md={3}>
+                                <InputLabel id="dosage-time">Time</InputLabel>
+                                <TimePicker
+                                  label="Dosage time"
+                                  value={convertHoursMinutesStringToDate(
+                                    reminderPlanTime.time
+                                  )}
+                                  onChange={(newValue: Date | null) => {
+                                    handleReminderPlanTimeDosageTime(
+                                      index,
+                                      reminderPlanTimeIndex
+                                    )(newValue as Date);
+                                  }}
+                                  renderInput={(props) => (
+                                    <TextField
+                                      variant="outlined"
+                                      size="medium"
+                                      sx={{
+                                        marginTop: 0,
+                                      }}
+                                      {...props}
+                                    />
+                                  )}
+                                />
+                              </Grid>
+                            </Grid>
+                          )
+                        )}
+                      </>
+                    )}
+                    <Button onClick={handlePlanClose}>Save</Button>
+                  </CustomModal>
+                  {/* <Grid container spacing={4}>
                     <Grid item xs={6}>
                       <DatePicker
                         label="Start Date"
@@ -607,12 +787,13 @@ const Prescribe = () => {
                         )
                       )}
                     </>
-                  )}
+                  )} */}
                 </Card>
               </Grid>
             ))}
           </Grid>
         )}
+
         <>
           <Modal
             open={open}
@@ -758,7 +939,7 @@ const Prescribe = () => {
           </Modal>
         </>
         {formik.values.reminderPlans.length > 0 && <div></div>}
-        <CheckInteractions reminderPlan={formik.values.reminderPlans} />
+        {/* <CheckInteractions reminderPlan={formik.values.reminderPlans} /> */}
         <Grid
           item
           xs={12}

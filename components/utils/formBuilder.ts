@@ -7,7 +7,7 @@ import {
 } from "./commons";
 
 export const createReminderPlanTime = () => ({
-  dosage: 0,
+  dosage: 1,
   time: "08:00",
 });
 
