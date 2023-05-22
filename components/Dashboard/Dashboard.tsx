@@ -28,8 +28,9 @@ import {
   faUserInjured,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useGetIdentity, usePermissions } from "react-admin";
+import { useGetIdentity, usePermissions, useRedirect } from "react-admin";
 import InfoIcon from "@mui/icons-material/Info";
+
 type PerDay = {
   lastActive: string;
   count: number;
@@ -69,6 +70,7 @@ export default function Dashboard() {
   const rawAuth = localStorage.getItem("auth");
   const auth = JSON.parse(rawAuth ? rawAuth : "{}");
   const { permissions, isLoading: permissionLoading } = usePermissions();
+  const redirect = useRedirect();
   const {
     isIdle,
     data: DashboardData,
@@ -130,7 +132,7 @@ export default function Dashboard() {
           <Grid item xs={12} md={6} lg={3}>
             <StatsCard
               color="warning"
-              title="medicines"
+              title="medications"
               total={DashboardData?.medicinesAvailable}>
               <FontAwesomeIcon icon={faPills} size="3x" />
             </StatsCard>
@@ -198,7 +200,14 @@ export default function Dashboard() {
                           <Button
                             variant="text"
                             color="primary"
-                            aria-label="table-button">
+                            aria-label="table-button"
+                            onClick={() => {
+                              redirect(
+                                "show",
+                                "patients",
+                                row.patientAccountId
+                              );
+                            }}>
                             <InfoIcon
                               sx={{
                                 color: "#00C2CB",
@@ -215,14 +224,6 @@ export default function Dashboard() {
           </Grid>
         </Grid>
       </Grid>
-
-      <Typography
-        variant="h4"
-        sx={{
-          wordBreak: "break-word",
-        }}>
-        {getAuthorizationHeader()}
-      </Typography>
     </Box>
   );
 }

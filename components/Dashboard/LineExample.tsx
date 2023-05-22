@@ -25,7 +25,6 @@ const LineChart = () => {
     }
   );
   const chartRef = useRef<HTMLCanvasElement>(null);
-  // console.log(Object.keys(props.activeUsers || {}));
   useEffect(() => {
     if (chartRef.current) {
       const ctx = chartRef.current.getContext("2d");
@@ -54,6 +53,9 @@ const LineChart = () => {
               y: {
                 beginAtZero: true,
                 axis: "y",
+                ticks: {
+                  stepSize: 1,
+                },
               },
             },
             backgroundColor: "white",

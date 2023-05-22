@@ -35,7 +35,12 @@ export const authProvider = {
       const { id, firstName, lastName, attachment, code, operatorAccount } =
         JSON.parse(auth || "");
       const { hospitalId } = operatorAccount;
-      const img = attachment ? attachment.filePath : null;
+      localStorage.setItem("avatar", attachment ? attachment.filePath : null);
+      localStorage.setItem("code", code);
+      localStorage.setItem("hospitalId", hospitalId);
+      localStorage.setItem("id", id);
+      // const img = attachment ? attachment.filePath : null;
+      const img = localStorage.getItem("avatar")?.toString();
       const fullName = `${firstName} ${lastName}`;
       return Promise.resolve({
         id: id,
