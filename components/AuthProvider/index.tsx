@@ -40,12 +40,12 @@ export const authProvider = {
       localStorage.setItem("hospitalId", hospitalId);
       localStorage.setItem("id", id);
       // const img = attachment ? attachment.filePath : null;
-      const img = localStorage.getItem("avatar")?.toString();
+      const img = localStorage.getItem("avatar");
       const fullName = `${firstName} ${lastName}`;
       return Promise.resolve({
         id: id,
         fullName: fullName,
-        avatar: img ? img : null,
+        avatar: img ? img : "",
         code: code,
         hospitalId: hospitalId,
       });

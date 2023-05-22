@@ -756,7 +756,9 @@ const Prescribe = () => {
             </Grid>
           </Card>
         </Modal>
-        {/* <CheckInteractions reminderPlan={formik.values.reminderPlans} /> */}
+        {formik.values.reminderPlans.length >= 2 && (
+          <CheckInteractions reminderPlan={formik.values.reminderPlans} />
+        )}
         <Grid
           item
           xs={12}
