@@ -219,8 +219,10 @@ const MedicationPlanShow = () => {
                             />
                           }
                           title={
-                            <Typography variant="h4">{`Reminder Plan for ${reminderPlan.medication.name}
-                          `}</Typography>
+                            <Typography variant="h4">
+                              {`Reminder Plan for ${reminderPlan.medication.name}
+                          `}{" "}
+                            </Typography>
                           }
                         />
                         <CardContent>
@@ -275,37 +277,35 @@ const MedicationPlanShow = () => {
                               }
                             </Grid>
                             {reminderPlan.reminderPlanTimes.map(
-                              (item: ReminderPlanTimeDTO, idx) => (
-                                <>
-                                  <Grid item xs={12} md={6}>
-                                    <Grid item>
-                                      Taken:{" "}
-                                      <BooleanField
-                                        source={`reminderPlans[${index}].reminderPlanTimes[${idx}].isTaken`}
-                                      />
-                                    </Grid>
-                                    <Grid item>
-                                      Skipped:{" "}
-                                      <BooleanField
-                                        source={`reminderPlans[${index}].reminderPlanTimes[${idx}].isSkipped`}
-                                      />
-                                    </Grid>
-                                    <Grid item>
-                                      Dosage:{" "}
-                                      <TextField
-                                        source={`reminderPlans[${index}].reminderPlanTimes[${idx}].dosage`}
-                                      />
-                                    </Grid>
-                                    <Grid item>
-                                      Taken time:{" "}
-                                      <DateField
-                                        source={`reminderPlans[${index}].reminderPlanTimes[${idx}].time`}
-                                        showTime
-                                        // showDate={false}
-                                      />
-                                    </Grid>
+                              (item: ReminderPlanTimeDTO, idx: number) => (
+                                <Grid key={idx} item xs={12} md={6}>
+                                  <Grid item>
+                                    Taken:{" "}
+                                    <BooleanField
+                                      source={`reminderPlans[${index}].reminderPlanTimes[${idx}].isTaken`}
+                                    />
                                   </Grid>
-                                </>
+                                  <Grid item>
+                                    Skipped:{" "}
+                                    <BooleanField
+                                      source={`reminderPlans[${index}].reminderPlanTimes[${idx}].isSkipped`}
+                                    />
+                                  </Grid>
+                                  <Grid item>
+                                    Dosage:{" "}
+                                    <TextField
+                                      source={`reminderPlans[${index}].reminderPlanTimes[${idx}].dosage`}
+                                    />
+                                  </Grid>
+                                  <Grid item>
+                                    Taken time:{" "}
+                                    <DateField
+                                      source={`reminderPlans[${index}].reminderPlanTimes[${idx}].time`}
+                                      showTime
+                                      // showDate={false}
+                                    />
+                                  </Grid>
+                                </Grid>
                               )
                             )}
                           </Grid>

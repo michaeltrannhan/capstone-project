@@ -41,11 +41,11 @@ import {
   TableContainer,
   Paper,
 } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import MedicationPlanServices from "./MedicationPlanServices";
 import MedicationSearchBar from "./MedicationSearchBar";
 
-import { useGetIdentity, useNotify } from "react-admin";
+import { useGetIdentity, useNotify, useRedirect } from "react-admin";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
@@ -59,6 +59,7 @@ import dayjs from "dayjs";
 import CheckInteractions from "./CheckInteractions";
 import CustomModal from "./Modal";
 import ReminderPlanActions from "./ReminderPlanActions";
+import html2canvas from "html2canvas";
 
 const Prescribe = () => {
   const [currentMedication, setCurrentMedication] = useState<Medication | null>(
@@ -67,6 +68,9 @@ const Prescribe = () => {
   const [currentImage, setCurrentImage] = useState<string>("");
   const [currentPlanIndex, setCurrentPlanIndex] = useState<number>(0);
   const [openPlan, setOpenPlan] = useState<boolean>(false);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const [modalLoaded, setModalLoaded] = useState(false);
+  const redirect = useRedirect();
   const handlePlanOpen = () => setOpenPlan(true);
   const handlePlanClose = () => setOpenPlan(false);
   const [open, setOpen] = useState(false);
@@ -256,6 +260,28 @@ const Prescribe = () => {
     formik.setValues({ ...formik.values });
   };
 
+  const handleCaptureModal = async () => {
+    if (modalRef.current) {
+      const modalElement = modalRef.current;
+      // const modalBounds = modalElement.getBoundingClientRect();
+      // const canvas = await html2canvas(modalElement, {
+      //   x: modalBounds.left,
+      //   y: modalBounds.top,
+      //   width: modalBounds.width,
+      //   height: modalBounds.height,
+      //   useCORS: true,
+      // });
+      const canvas = await html2canvas(modalElement, { useCORS: true });
+      const imageURL = canvas.toDataURL();
+      console.log(imageURL);
+    }
+  };
+
+  useEffect(() => {
+    if (modalRef.current) {
+      setModalLoaded(true);
+    }
+  }, []);
   return (
     <form onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
       <Head>
@@ -272,7 +298,31 @@ const Prescribe = () => {
         padding={4}
         // bgcolor={(theme) => theme.palette.background.paper}
       >
-        <Typography variant="h4">Basic Patient Information</Typography>
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignContent: "center",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}>
+            <Typography variant="h4">Basic Patient Information</Typography>
+            {!formik.values.patientId && (
+              <Button
+                variant="contained"
+                sx={{
+                  textTransform: "none",
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  redirect("create", "patients");
+                }}>
+                New Patient? Click Here!
+              </Button>
+            )}
+          </Box>
+        </Grid>
         <Divider sx={{ p: "10px", width: "100%" }} />
         <Grid item container xs={12} md={6} sx={{ paddingTop: "8px" }}>
           <Grid
@@ -425,7 +475,12 @@ const Prescribe = () => {
                           handlePlanOpen();
                         }}
                         deleteHandler={() => {
-                          handleDeleteReminderPlan(index);
+                          setCurrentPlanIndex(
+                            index === formik.values.reminderPlans.length - 1
+                              ? formik.values.reminderPlans.length - 2
+                              : index - 1
+                          );
+                          handleDeleteReminderPlan(currentPlanIndex);
                         }}
                       />
                     </TableCell>
@@ -618,128 +673,156 @@ const Prescribe = () => {
           open={open}
           onClose={handleModalClose}
           aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description">
+          aria-describedby="modal-modal-description"
+          sx={{
+            "& .MuiModal-root": {
+              display: "flex",
+              width: "fit-content",
+              height: "fit-content",
+            },
+            display: "flex",
+            width: "100%",
+            height: "100%",
+            padding: 2,
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
           <Card
+            // ref={modalRef}
             sx={{
-              position: "absolute" as "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 1080,
+              // top: "50%",
+              // left: "50%",
+              // transform: "translate(-50%, -50%)",
+
+              width: "1080px",
               bgcolor: "background.paper",
               border: "1px solid #00C2CB",
               borderRadius: "20px",
-              p: 4,
+              // p: 4,
             }}>
-            <Grid container spacing={4}>
-              <Grid item xs={12} textAlign="center">
-                <Typography variant="h2" textAlign="center">
-                  {formik.values.name} Prescription Form
-                </Typography>
-              </Grid>
-              <Grid item container xs={12} md={9} spacing={4}>
-                <Grid item xs={12}>
-                  <Typography variant="h4" paddingTop={0}>
-                    General information
+            <Box
+              ref={modalRef}
+              sx={{
+                p: 4,
+                justifyContent: "center",
+                alignItems: "center",
+              }}>
+              <Grid
+                container
+                spacing={4}
+                sx={{
+                  alignItems: "center",
+                }}>
+                <Grid item xs={12} textAlign="center">
+                  <Typography variant="h2" textAlign="center">
+                    {formik.values.name} Prescription Form
                   </Typography>
                 </Grid>
-                <Grid item xs={6}>
-                  {!isLoading && (
+                <Grid item container xs={12} md={9} spacing={4}>
+                  <Grid item xs={12}>
+                    <Typography variant="h4" paddingTop={0}>
+                      General information
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6}>
+                    {!isLoading && (
+                      <TextField
+                        value={data?.fullName}
+                        fullWidth
+                        variant="standard"
+                        label="Doctor name"
+                        disabled
+                      />
+                    )}
+                  </Grid>
+                  <Grid item xs={6}>
                     <TextField
-                      value={data?.fullName}
+                      value={formik.values.doctorId}
+                      label="Doctor ID"
                       fullWidth
                       variant="standard"
-                      label="Doctor name"
                       disabled
                     />
-                  )}
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      value={formik.values.patientId}
+                      label="Patient ID"
+                      fullWidth
+                      variant="standard"
+                      disabled
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    value={formik.values.doctorId}
-                    label="Doctor ID"
-                    fullWidth
-                    variant="standard"
-                    disabled
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    value={formik.values.patientId}
-                    label="Patient ID"
-                    fullWidth
-                    variant="standard"
-                    disabled
-                  />
+                <Grid item xs={12} md={3}>
+                  <Typography variant="h5" paddingTop={0}>
+                    Scan here!
+                  </Typography>
+                  {currentImage !== "" ? (
+                    <Image
+                      src={currentImage}
+                      alt="QRCode"
+                      width={200}
+                      height={200}
+                    />
+                  ) : null}
                 </Grid>
               </Grid>
-              <Grid item xs={12} md={3}>
-                <Typography variant="h5" paddingTop={0}>
-                  Scan here!
-                </Typography>
-                {currentImage !== "" ? (
-                  <Image
-                    src={currentImage}
-                    alt="QRCode"
-                    width={125}
-                    height={125}></Image>
-                ) : null}
-              </Grid>
-            </Grid>
 
-            <Table
-              size="medium"
-              sx={{
-                borderRadius: "20px",
-                marginTop: "2rem",
-              }}>
-              <TableHead
+              <Table
+                size="medium"
                 sx={{
-                  color: "#000",
-
-                  "& .MuiTableCell-head": {
-                    backgroundColor: "rgba(0, 194, 203, 0.2)",
-                  },
+                  borderRadius: "20px",
+                  marginTop: "2rem",
                 }}>
-                <TableRow>
-                  <TableCell>Medication name</TableCell>
-                  <TableCell>Start Date</TableCell>
-                  <TableCell>Frequency</TableCell>
-                  <TableCell>Time to take each day</TableCell>
-                  <TableCell>At times</TableCell>
-                  <TableCell>Dosage per remedy</TableCell>
-                </TableRow>
-              </TableHead>
-              {formik.values.reminderPlans.map((reminderPlan, index) => (
-                <TableBody key={index}>
+                <TableHead
+                  sx={{
+                    color: "#000",
+
+                    "& .MuiTableCell-head": {
+                      backgroundColor: "rgba(0, 194, 203, 0.2)",
+                    },
+                  }}>
                   <TableRow>
-                    <TableCell>{reminderPlan.medicationName}</TableCell>
-                    <TableCell>
-                      {dayjs(reminderPlan.startDate).format("DD/MM/YYYY")}
-                    </TableCell>
-                    <TableCell>
-                      {reminderPlan.frequency === "DAY_INTERVAL" &&
-                      reminderPlan.interval === 1
-                        ? "Daily"
-                        : "Selected Days"}
-                    </TableCell>
-                    <TableCell>
-                      {reminderPlan.reminderPlanTimes.length}
-                    </TableCell>
-                    <TableCell>
-                      {reminderPlan.reminderPlanTimes.map((time, index) => (
-                        <Chip key={index} label={time.time} />
-                      ))}
-                    </TableCell>
-                    <TableCell>
-                      {reminderPlan.reminderPlanTimes.map((time, index) => (
-                        <Chip key={index} label={time.dosage} />
-                      ))}
-                    </TableCell>
+                    <TableCell>Medication name</TableCell>
+                    <TableCell>Start Date</TableCell>
+                    <TableCell>Frequency</TableCell>
+                    <TableCell>Time to take each day</TableCell>
+                    <TableCell>At times</TableCell>
+                    <TableCell>Dosage per remedy</TableCell>
                   </TableRow>
-                </TableBody>
-              ))}
-            </Table>
+                </TableHead>
+                {formik.values.reminderPlans.map((reminderPlan, index) => (
+                  <TableBody key={index}>
+                    <TableRow>
+                      <TableCell>{reminderPlan.medicationName}</TableCell>
+                      <TableCell>
+                        {dayjs(reminderPlan.startDate).format("DD/MM/YYYY")}
+                      </TableCell>
+                      <TableCell>
+                        {reminderPlan.frequency === "DAY_INTERVAL" &&
+                        reminderPlan.interval === 1
+                          ? "Daily"
+                          : "Selected Days"}
+                      </TableCell>
+                      <TableCell>
+                        {reminderPlan.reminderPlanTimes.length}
+                      </TableCell>
+                      <TableCell>
+                        {reminderPlan.reminderPlanTimes.map((time, index) => (
+                          <Chip key={index} label={time.time} />
+                        ))}
+                      </TableCell>
+                      <TableCell>
+                        {reminderPlan.reminderPlanTimes.map((time, index) => (
+                          <Chip key={index} label={time.dosage} />
+                        ))}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                ))}
+              </Table>
+            </Box>
             <Grid
               container
               sx={{
@@ -748,6 +831,7 @@ const Prescribe = () => {
               paddingTop={2}>
               <Button
                 variant="contained"
+                onClick={handleCaptureModal}
                 sx={{
                   backgroundColor: "#00C2CB",
                 }}>

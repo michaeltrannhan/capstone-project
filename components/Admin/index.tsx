@@ -79,6 +79,7 @@ import api from "../../services";
 import { QueryClient } from "react-query";
 const dataProvider = DataProvider(
   "https://capstone-project-hcmut.herokuapp.com"
+  // "http://localhost:3000"
 );
 
 const myDateProvider = {

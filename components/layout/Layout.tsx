@@ -6,7 +6,7 @@ import CustomAppBar from "./AppBar";
 const CustomLayout = (props: LayoutProps) => (
   <>
     <Layout {...props} appBar={CustomAppBar} menu={CustomMenu} />
-    {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+    <ReactQueryDevtools initialIsOpen={false} />
   </>
 );
 export default CustomLayout;
