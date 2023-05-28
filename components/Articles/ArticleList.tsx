@@ -45,9 +45,9 @@ import ResetViewsButton from "./ResetViewsButton";
 import { Search } from "@mui/icons-material";
 import ListAction from "../commons/ListAction";
 import ActionToolbar from "../commons/ListActionToolbar";
-import ListTitle from "../commons/ListTitle";
 import ListFilters from "../commons/ListFilters";
 import Head from "next/head";
+import { Role } from "../utils/commons";
 const ArticleBulkActionButtons = () => (
   <>
     <ResetViewsButton />
@@ -55,6 +55,43 @@ const ArticleBulkActionButtons = () => (
     <BulkDeleteButton />
   </>
 );
+const ListTitle = () => {
+  const { permissions } = usePermissions<Role, any>();
+  return (
+    <Stack
+      direction="row"
+      spacing={0}
+      justifyContent="space-between"
+      alignItems="baseline">
+      <Typography variant="h3" sx={{ marginTop: "40px", marginLeft: "20px" }}>
+        List of Articles
+      </Typography>
+      {permissions.name === "ADMIN" || permissions.name === "HOSPITAL_ADMIN" ? (
+        <>
+          <CreateButton
+            variant="contained"
+            label="Add Article"
+            icon={<AddIcon />}
+            sx={{
+              paddingY: "0.5em",
+              paddingX: "1em",
+              fontWeight: 600,
+              marginRight: "20px",
+              fontSize: "0.875rem",
+              lineHeight: "1.75",
+              backgroundColor: "rgb(99, 102, 241)",
+              borderRadius: "12px",
+              border: "1px solid #E0E2E7",
+              boxShadow: "rgba(0, 0, 0, 0.08) 0px 1px 5px",
+              justifyContent: "flex-end",
+              width: "auto",
+            }}
+          />
+        </>
+      ) : null}
+    </Stack>
+  );
+};
 
 const ArticleList = () => {
   // const [filter, setFilter] = React.useState("");
@@ -64,7 +101,7 @@ const ArticleList = () => {
       <Head>
         <title>List of Articles</title>
       </Head>
-      <ListTitle resource="Article" />
+      <ListTitle />
       <List
         sort={{ field: "id", order: "asc" }}
         perPage={10}

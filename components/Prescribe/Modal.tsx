@@ -1,5 +1,4 @@
-import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   Box,
   Card,
@@ -8,6 +7,7 @@ import {
   ListItem,
   ListItemText,
   Modal,
+  Paper,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -21,30 +21,28 @@ type Props = {
 };
 
 const CustomModal = (props: Props) => {
-  const [openPlan, setOpenPlan] = React.useState<boolean>(false);
-  const handlePlanOpen = () => setOpenPlan(true);
-  const handlePlanClose = () => setOpenPlan(false);
   return (
     <Modal
       open={props.open}
       onClose={props.handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description">
-      <Card
+      <Paper
         sx={{
           position: "absolute" as "absolute",
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: 1080,
+          maxWidth: "840px",
           bgcolor: "background.paper",
-          border: "1px solid #00C2CB",
+          //   border: "1px solid #00C2CB",
           borderRadius: "20px",
           p: 4,
-        }}>
-      
+        }}
+        elevation={3}
+        >
         {props.children}
-      </Card>
+      </Paper>
     </Modal>
   );
 };

@@ -14,13 +14,13 @@ export default function DebouncedInput({ onChange }: DebouncedInputProps) {
     const fetchUser = setTimeout(() => {
       if (inputValue.length > 0) {
         api
-          .get(`/patients?keyword=${inputValue}`)
+          .get(`/patients/byphone/${inputValue}`)
           .then((res) => {
-            onChange(res.data.data[0]);
+            onChange(res.data);
           })
           .catch((err) => console.log(err));
       }
-    }, 1000);
+    }, 300);
     return () => clearTimeout(fetchUser);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue]);
@@ -32,7 +32,6 @@ export default function DebouncedInput({ onChange }: DebouncedInputProps) {
         id="debounced-input"
         label="Search Patient"
         value={inputValue || ""}
-        // defaultValue={"0"}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setInputValue(e.target.value)
         }></TextField>

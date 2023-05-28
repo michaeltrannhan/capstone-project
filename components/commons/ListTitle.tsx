@@ -6,7 +6,7 @@ import { Role } from "../utils/commons";
 const ListTitle = ({ resource }: { resource: string }) => {
   const { permissions } = usePermissions<Role, any>();
   // const unaccpetedResource = ["Hospital", "Medication Plan", "Medication"];
-  const unacceptedResource: string[] = ['Hospital', "Medication Plan"];
+  const unacceptedResource: string[] = ["Hospital", "Medication Plan"];
   return (
     <Stack
       direction="row"
@@ -16,7 +16,7 @@ const ListTitle = ({ resource }: { resource: string }) => {
       <Typography variant="h3" sx={{ marginTop: "40px", marginLeft: "20px" }}>
         List of {resource}
       </Typography>
-      {permissions.name === "ADMIN" || permissions.name === "HOSPITAL_ADMIN" ? (
+      {permissions.name === "ADMIN" || permissions.name == "HOSPITAL_ADMIN" ? (
         <>
           {!unacceptedResource.includes(resource) && (
             <CreateButton

@@ -108,9 +108,7 @@ const Chat = () => {
       refetchOnWindowFocus: false,
     }
   );
-
-  // console.log("chatData", chatData);
-
+  console.log(chatData);
   if (chatLoading) return <div>Loading...</div>;
   return (
     <>
@@ -123,23 +121,34 @@ const Chat = () => {
           flexGrow: 1,
           py: 6,
           paddingX: 4,
+          overflow: "hidden",
         }}>
-        <Typography variant="h4">Chat</Typography>
-
         <Grid
           container
           height="100%"
           component={Paper}
           elevation={3}
           sx={{
-            height: "100%",
+            height: "calc(100vh - 9rem)",
+            overflow: "hidden",
           }}>
-          <Grid item xs={12} md={6} lg={2}>
+          <Grid item xs={2}>
+            <Typography
+              variant="h4"
+              fontSize={20}
+              fontWeight={700}
+              textAlign="start"
+              sx={{
+                paddingTop: 2,
+                paddingX: 2,
+              }}>
+              Chats
+            </Typography>
             <Box
               sx={{
-                borderBottom: 1,
                 borderColor: "divider",
                 boxShadow: "-moz-initial",
+                padding: 2,
                 height: "100%",
               }}>
               <Tabs
@@ -150,13 +159,34 @@ const Chat = () => {
                 aria-label="Vertical tabs example"
                 sx={{
                   borderRight: 1,
+                  borderTop: 1,
+                  padding: 2,
+                  paddingLeft: 0,
                   borderColor: "divider",
                   width: "100%",
                   height: "100%",
+                  ".MuiTabs-root": {
+                    borderRadius: "20px",
+                  },
+                  ".MuiTabs-indicator": {
+                    display: "none",
+                  },
                 }}>
                 {chatData?.map((chat, index) => (
                   <Tab
                     key={chat.id}
+                    sx={{
+                      borderRadius: "12px",
+                      color: "black",
+                      paddingY: 2,
+                      ".MuiTab-root	": {
+                        borderRadius: "20px",
+                      },
+                      "&.Mui-selected": {
+                        backgroundColor: "rgba(145, 158, 171, 0.16)",
+                        color: "black",
+                      },
+                    }}
                     label={`${chat.name} Medication plan`}
                     {...a11yProps(index)}
                   />
@@ -164,7 +194,13 @@ const Chat = () => {
               </Tabs>
             </Box>
           </Grid>
-          <Grid item xs={12} md={6} lg={10}>
+          <Grid
+            item
+            xs={10}
+            sx={{
+              position: "relative",
+              height: "100%",
+            }}>
             {chatData
               ? chatData?.map((chat, index) => (
                   <TabPanel key={chat.id} value={value} index={index}>

@@ -42,8 +42,20 @@ const DoctorShow = () => {
           "& .RaShow-card": {
             padding: "20px",
           },
+          width: "50%",
+          alignItems: "center",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignContent: "center",
+          justifyItems: "center",
+          alignSelf: "center",
+          // overflowY: "hidden",
         }}>
-        <Card>
+        <Card
+          sx={{
+            // position: "relative",
+            // height: "calc(100vh - 12rem)",
+          }}>
           <CardHeader
             avatar={
               <WithRecord
@@ -105,7 +117,11 @@ const DoctorShow = () => {
             }}
           />
 
-          <CardContent>
+          <CardContent
+            sx={{
+              // overflowY: "scroll",
+              // height: "inherit",
+            }}>
             <Typography
               variant="h4"
               color="primary"
@@ -113,7 +129,7 @@ const DoctorShow = () => {
               marginBottom={2}>
               About the doctor:
             </Typography>
-            <Grid container spacing={4} paddingLeft={4} marginBottom={4}>
+            <Grid container spacing={2} paddingLeft={2} marginBottom={4}>
               <Grid item container md={6} sm={12}>
                 <Grid item xs={4}>
                   Doctor ID:
@@ -310,7 +326,9 @@ const DoctorShow = () => {
                           .length > 0
                           ? record.operatorAccount.doctorAccount.qualifications.map(
                               (qualification: any, index: any) => (
-                                <li key={index}>{qualification}</li>
+                                <Typography key={index}>
+                                  {qualification.name}
+                                </Typography>
                               )
                             )
                           : "Not available"}
@@ -327,7 +345,7 @@ const DoctorShow = () => {
               marginBottom={2}>
               Doctor Contact Information:
             </Typography>
-            <Grid container spacing={4} paddingLeft={4}>
+            <Grid container spacing={2} paddingLeft={2}>
               <Grid item container md={6} sm={12}>
                 <Grid item xs={4}>
                   Doctor Username:

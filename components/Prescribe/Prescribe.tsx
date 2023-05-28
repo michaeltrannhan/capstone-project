@@ -38,33 +38,39 @@ import {
   TableCell,
   TableBody,
   Chip,
+  TableContainer,
+  Paper,
 } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import MedicationPlanServices from "./MedicationPlanServices";
 import MedicationSearchBar from "./MedicationSearchBar";
 
-import { useGetIdentity, useNotify } from "react-admin";
+import { useGetIdentity, useNotify, useRedirect } from "react-admin";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
-import Input from "../form-components/Input";
 import MultipleSelect from "../form-components/MultiSelect";
 import DebouncedInput from "../form-components/DebouncedInput";
 import { convertTimeToHoursMinutes } from "../utils/commons";
 import { convertHoursMinutesStringToDate } from "../utils/commons";
 import Image from "next/image";
 import Head from "next/head";
-import style from "styled-jsx/style";
 import dayjs from "dayjs";
 import CheckInteractions from "./CheckInteractions";
 import CustomModal from "./Modal";
+import ReminderPlanActions from "./ReminderPlanActions";
+import html2canvas from "html2canvas";
 
 const Prescribe = () => {
   const [currentMedication, setCurrentMedication] = useState<Medication | null>(
     null
   );
   const [currentImage, setCurrentImage] = useState<string>("");
+  const [currentPlanIndex, setCurrentPlanIndex] = useState<number>(0);
   const [openPlan, setOpenPlan] = useState<boolean>(false);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const [modalLoaded, setModalLoaded] = useState(false);
+  const redirect = useRedirect();
   const handlePlanOpen = () => setOpenPlan(true);
   const handlePlanClose = () => setOpenPlan(false);
   const [open, setOpen] = useState(false);
@@ -135,13 +141,9 @@ const Prescribe = () => {
     formik.setValues(formik.values);
   };
 
-  const handleSearchCurrentPatient = (inputValue: string) => {};
-
   const handleReminderPlanTimeDosageTime =
     (reminderPlanIndex: number, reminderPlanTimeIndex: number) =>
     (value: Date | null) => {
-      // const result = convertTimeToString(value as Date);
-      // console.log(result);
       formik.values.reminderPlans[reminderPlanIndex].reminderPlanTimes[
         reminderPlanTimeIndex
       ].time = convertTimeToHoursMinutes(value as Date);
@@ -204,8 +206,7 @@ const Prescribe = () => {
 
   const handleSelectFrequency = (index: number) => (value: Frequency) => {
     let reminderPlan = formik.values.reminderPlans[index];
-    let medicationName = reminderPlan.medicationName;
-    let medicationId = reminderPlan.medicationId;
+    let { medicationName, medicationId } = reminderPlan;
     switch (value as Frequency) {
       case Frequency.INTERVAL:
         formik.values.reminderPlans[index] = createIntervalReminderPlan(
@@ -234,7 +235,10 @@ const Prescribe = () => {
     }
   };
 
-  const handleDeleteReminderPlan = (index: number) => {};
+  const handleDeleteReminderPlan = (index: number) => {
+    formik.values.reminderPlans.splice(index, 1);
+    formik.setValues(formik.values);
+  };
 
   const handleAddReminderPlan = (medication: Medication) => {
     if (medication.id === undefined) return;
@@ -255,17 +259,29 @@ const Prescribe = () => {
     ];
     formik.setValues({ ...formik.values });
   };
-  const handleMedicationPlanName = (value: string) => {
-    formik.values.name = value;
-    formik.setValues(formik.values);
+
+  const handleCaptureModal = async () => {
+    if (modalRef.current) {
+      const modalElement = modalRef.current;
+      // const modalBounds = modalElement.getBoundingClientRect();
+      // const canvas = await html2canvas(modalElement, {
+      //   x: modalBounds.left,
+      //   y: modalBounds.top,
+      //   width: modalBounds.width,
+      //   height: modalBounds.height,
+      //   useCORS: true,
+      // });
+      const canvas = await html2canvas(modalElement, { useCORS: true });
+      const imageURL = canvas.toDataURL();
+      console.log(imageURL);
+    }
   };
-  const handleInteractions = () => {
-    const filteredMedications = formik.values.reminderPlans.filter(
-      (medication) => medication.medicationId
-    );
-    console.log(filteredMedications);
-    if (filteredMedications.length === 0) return;
-  };
+
+  useEffect(() => {
+    if (modalRef.current) {
+      setModalLoaded(true);
+    }
+  }, []);
   return (
     <form onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
       <Head>
@@ -282,7 +298,31 @@ const Prescribe = () => {
         padding={4}
         // bgcolor={(theme) => theme.palette.background.paper}
       >
-        <Typography variant="h4">Basic Patient Information</Typography>
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignContent: "center",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}>
+            <Typography variant="h4">Basic Patient Information</Typography>
+            {!formik.values.patientId && (
+              <Button
+                variant="contained"
+                sx={{
+                  textTransform: "none",
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  redirect("create", "patients");
+                }}>
+                New Patient? Click Here!
+              </Button>
+            )}
+          </Box>
+        </Grid>
         <Divider sx={{ p: "10px", width: "100%" }} />
         <Grid item container xs={12} md={6} sx={{ paddingTop: "8px" }}>
           <Grid
@@ -310,6 +350,22 @@ const Prescribe = () => {
             <TextField
               value={formik.values.patientId || ""}
               onChange={formik.handleChange}
+              helperText={
+                formik.values.patientId ? (
+                  ""
+                ) : (
+                  <Typography
+                    variant="caption"
+                    fontSize={12}
+                    fontWeight={700}
+                    sx={{
+                      color: (theme) => theme.palette.error.main,
+                      padding: 0,
+                    }}>
+                    Please enter a valid patient phone number
+                  </Typography>
+                )
+              }
               disabled
               fullWidth
               variant="outlined"
@@ -373,188 +429,204 @@ const Prescribe = () => {
         </Grid>
 
         {formik.values.reminderPlans.length > 0 && (
-          <Grid
+          <TableContainer
+            component={Paper}
+            elevation={3}
             sx={{
-              // marginLeft: "30px",
-              alignItems: "center",
-              justifyContent: "center",
-              alignSelf: "center",
-              alignContent: "center",
-              justifySelf: "center",
-              width: "100%",
-            }}
-            item
-            container
-            spacing={2}
-            xs={12}>
-            {formik.values.reminderPlans.map((reminderPlan, index) => (
-              <Grid
-                key={index}
-                item
-                xs={12}
-                justifyContent="center"
-                alignItems="center">
-                <Card
-                  sx={{
-                    width: "100%",
-                    bgcolor: "background.paper",
-                    padding: "24px",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    alignSelf: "center",
-                    justifySelf: "center",
-                  }}>
-                  <ListItem
-                    secondaryAction={
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          width: "fit-content",
-                          bgcolor: "background.paper",
-                          color: "text.secondary",
-                          borderRadius: "5px",
-                        }}>
-                        <Tooltip
-                          title="Edit Reminder Plan"
-                          placement="top-start">
-                          <IconButton
-                            edge="start"
-                            aria-label="edit"
-                            onClick={
-                              //   () => {
-                              //   alert(JSON.stringify(reminderPlan, null, 2));
-                              // }
-                              handlePlanOpen
-                            }
-                            sx={{
-                              "&:hover": {
-                                color: "primary.main",
-                                borderRadius: "5px",
-                              },
-                            }}>
-                            <FontAwesomeIcon icon={faPenToSquare} />
-                          </IconButton>
-                        </Tooltip>
-                        <Divider
-                          orientation="vertical"
-                          variant="middle"
-                          flexItem
-                        />
-                        <Tooltip
-                          title="Delete Reminder Plan"
-                          placement="top-start">
-                          <IconButton
-                            edge="end"
-                            aria-label="delete"
-                            sx={{
-                              "&:hover": {
-                                color: "primary.main",
-                                borderRadius: "5px",
-                              },
-                            }}>
-                            <FontAwesomeIcon icon={faTrash} />
-                          </IconButton>
-                        </Tooltip>
-                      </Box>
-                    }>
-                    <ListItemText>
-                      <Typography variant="body1" fontSize={24}>
+              marginTop: "1rem",
+            }}>
+            <Table
+              sx={{
+                "& .MuiTableCell-head": {
+                  backgroundColor: "rgba(0, 194, 203, 0.2)",
+                  "& th:first-child": {
+                    borderTopLeftRadius: "20px",
+                  },
+                  "& th:last-child": {
+                    borderTopRightRadius: "20px",
+                  },
+                },
+
+                "& .MuiTableRow-head": {
+                  borderTopLeftRadius: "20px",
+                  borderTopRightRadius: "20px",
+                },
+              }}>
+              <TableHead sx={{}}>
+                <TableRow>
+                  <TableCell>List of taken medicines</TableCell>
+                  <TableCell align="right" width="30px">
+                    Actions
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {formik.values.reminderPlans.map((reminderPlan, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <Typography variant="body1" fontSize={20}>
                         {reminderPlan.medicationName}
                       </Typography>
-                    </ListItemText>
-                  </ListItem>
-                  <CustomModal
-                    open={openPlan}
-                    handleClose={handlePlanClose}
-                    medicationName={reminderPlan.medicationName}>
-                    <Grid container spacing={4}>
-                      <Grid item xs={6}>
-                        <DatePicker
-                          label="Start Date"
-                          value={formik.values.reminderPlans[index].startDate}
-                          onChange={(date) => {
-                            handleStartDateChange(index)(date);
-                          }}
-                          renderInput={(props) => (
-                            <TextField variant="outlined" {...props} />
-                          )}
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <DatePicker
-                          label="End Date"
-                          value={formik.values.reminderPlans[index].endDate}
-                          onChange={(date) => {
-                            handleEndDateChange(index)(date);
-                          }}
-                          renderInput={(props) => (
-                            <TextField variant="outlined" {...props} />
-                          )}
-                        />
-                      </Grid>
-                    </Grid>
+                    </TableCell>
+                    <TableCell align="right">
+                      <ReminderPlanActions
+                        editHandler={() => {
+                          setCurrentPlanIndex(index);
+                          handlePlanOpen();
+                        }}
+                        deleteHandler={() => {
+                          setCurrentPlanIndex(
+                            index === formik.values.reminderPlans.length - 1
+                              ? formik.values.reminderPlans.length - 2
+                              : index - 1
+                          );
+                          handleDeleteReminderPlan(currentPlanIndex);
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+
+        {formik.values.reminderPlans.length > 0 && (
+          <CustomModal open={openPlan} handleClose={handlePlanClose}>
+            <Grid container spacing={1} alignContent="space-between">
+              <Grid item xs={6}>
+                <DatePicker
+                  label="Start Date"
+                  value={
+                    formik.values.reminderPlans[currentPlanIndex].startDate
+                  }
+                  onChange={(date) => {
+                    handleStartDateChange(currentPlanIndex)(date);
+                  }}
+                  renderInput={(props) => (
+                    <TextField variant="outlined" {...props} />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <DatePicker
+                  label="End Date"
+                  value={formik.values.reminderPlans[currentPlanIndex].endDate}
+                  onChange={(date) => {
+                    handleEndDateChange(currentPlanIndex)(date);
+                  }}
+                  renderInput={(props) => (
+                    <TextField variant="outlined" {...props} />
+                  )}
+                />
+              </Grid>
+            </Grid>
+            <Grid item container xs={12} columnSpacing={2} rowSpacing={2}>
+              <Grid item xs={12} md={2}>
+                <InputLabel id="frequency-select">Frequency</InputLabel>
+                <Select
+                  fullWidth
+                  labelId="frequency-select"
+                  // label="Frequency"
+                  // defaultValue={formik.values.reminderPlans[index].frequency}
+                  value={
+                    formik.values.reminderPlans[currentPlanIndex].frequency
+                  }
+                  onChange={(e) => {
+                    handleSelectFrequency(currentPlanIndex)(
+                      e.target.value as Frequency
+                    );
+                  }}>
+                  {FrequencyOptions.map((frequency, index) => (
+                    <MenuItem key={index} value={frequency.value}>
+                      {frequency.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Grid>
+              <Grid item xs={12} md={8} marginTop={1.8}>
+                {formik.values.reminderPlans[currentPlanIndex].frequency ===
+                Frequency.INTERVAL ? (
+                  <>
+                    <TextField
+                      variant="outlined"
+                      fullWidth
+                      label="What is the interval?"
+                      name={`formik.values.reminderPlans[${currentPlanIndex}].interval`}
+                      size="medium"
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        const reminderPlan =
+                          formik.values.reminderPlans[currentPlanIndex];
+                        if (reminderPlan.frequency === Frequency.INTERVAL) {
+                          reminderPlan.interval = parseInt(value, 10);
+                          formik.setValues({ ...formik.values });
+                        }
+                      }}
+                    />
+                  </>
+                ) : formik.values.reminderPlans[currentPlanIndex].frequency ===
+                  Frequency.SELECTED_DAYS ? (
+                  <>
+                    <MultipleSelect
+                      label="What days in a week?"
+                      options={DaysOfWeekOptions}
+                      onChange={handleMultiSelectChange(currentPlanIndex)}
+                    />
+                  </>
+                ) : null}
+              </Grid>
+              <Grid item xs={12} md={2}>
+                <InputLabel id="times-per-day">
+                  How many times to take each day?
+                </InputLabel>
+                <Select
+                  fullWidth
+                  labelId="times-per-day"
+                  defaultValue={1}
+                  onChange={(newValue) => {
+                    handleAddReminderPlanTime(currentPlanIndex)(
+                      newValue.target.value as number
+                    );
+                  }}>
+                  {Array.from(Array(10).keys()).map((number) => (
+                    <MenuItem key={number} value={number}>
+                      {number}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Grid>
+            </Grid>
+
+            <Divider sx={{ p: "10px", width: "100%" }} />
+
+            {formik.values.reminderPlans[currentPlanIndex].reminderPlanTimes
+              .length > 0 && (
+              <>
+                {formik.values.reminderPlans[
+                  currentPlanIndex
+                ].reminderPlanTimes.map(
+                  (reminderPlanTime, reminderPlanTimeIndex) => (
                     <Grid
-                      item
                       container
-                      xs={12}
+                      key={reminderPlanTimeIndex}
                       columnSpacing={2}
-                      rowSpacing={2}>
-                      <Grid item xs={12} md={2}>
-                        <InputLabel id="frequency-select">Frequency</InputLabel>
+                      direction="row">
+                      <Grid item xs={6} md={3}>
+                        <InputLabel id="dosage">Dosage</InputLabel>
                         <Select
                           fullWidth
-                          labelId="frequency-select"
-                          // defaultValue={formik.values.reminderPlans[index].frequency}
-                          value={formik.values.reminderPlans[index].frequency}
-                          onChange={(e) => {
-                            handleSelectFrequency(index)(
-                              e.target.value as Frequency
-                            );
-                          }}>
-                          {FrequencyOptions.map((frequency, index) => (
-                            <MenuItem key={index} value={frequency.value}>
-                              {frequency.label}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </Grid>
-                      <Grid item xs={12} md={8} marginTop={1.8}>
-                        {reminderPlan.frequency === Frequency.INTERVAL ? (
-                          <>
-                            <Input
-                              name={`reminderPlans[${index}].interval`}
-                              value={reminderPlan.interval}
-                              label="What is the interval?"
-                              onChange={formik.handleChange}
-                              onBlur={formik.handleBlur}
-                              variant="outlined"
-                              sx={{ width: "100%" }}
-                            />
-                          </>
-                        ) : reminderPlan.frequency ===
-                          Frequency.SELECTED_DAYS ? (
-                          <>
-                            <MultipleSelect
-                              label="What days in a week?"
-                              options={DaysOfWeekOptions}
-                              onChange={handleMultiSelectChange(index)}
-                            />
-                          </>
-                        ) : null}
-                      </Grid>
-                      <Grid item xs={12} md={2}>
-                        <InputLabel id="times-per-day">
-                          How many times to take each day?
-                        </InputLabel>
-                        <Select
-                          fullWidth
-                          labelId="times-per-day"
-                          defaultValue={1}
+                          labelId="dosage"
+                          // defaultValue={0}
+                          value={
+                            formik.values.reminderPlans[currentPlanIndex]
+                              .reminderPlanTimes[reminderPlanTimeIndex].dosage
+                          }
                           onChange={(newValue) => {
-                            handleAddReminderPlanTime(index)(
-                              newValue.target.value as number
-                            );
+                            handleChangeDosage(
+                              currentPlanIndex,
+                              reminderPlanTimeIndex
+                            )(newValue.target.value as number);
                           }}>
                           {Array.from(Array(10).keys()).map((number) => (
                             <MenuItem key={number} value={number}>
@@ -563,256 +635,84 @@ const Prescribe = () => {
                           ))}
                         </Select>
                       </Grid>
+                      <Grid item xs={6} md={3}>
+                        <InputLabel id="dosage-time">Time</InputLabel>
+                        <TimePicker
+                          label="Dosage time"
+                          value={convertHoursMinutesStringToDate(
+                            reminderPlanTime.time
+                          )}
+                          onChange={(newValue: Date | null) => {
+                            handleReminderPlanTimeDosageTime(
+                              currentPlanIndex,
+                              reminderPlanTimeIndex
+                            )(newValue as Date);
+                          }}
+                          renderInput={(props) => (
+                            <TextField
+                              variant="outlined"
+                              size="medium"
+                              sx={{
+                                marginTop: 0,
+                              }}
+                              {...props}
+                            />
+                          )}
+                        />
+                      </Grid>
                     </Grid>
-
-                    <Divider sx={{ p: "10px", width: "100%" }} />
-
-                    {formik.values.reminderPlans[index].reminderPlanTimes
-                      .length > 0 && (
-                      <>
-                        {formik.values.reminderPlans[
-                          index
-                        ].reminderPlanTimes.map(
-                          (reminderPlanTime, reminderPlanTimeIndex) => (
-                            <Grid
-                              container
-                              key={reminderPlanTimeIndex}
-                              columnSpacing={2}
-                              direction="row">
-                              <Grid item xs={6} md={3}>
-                                <InputLabel id="dosage">Dosage</InputLabel>
-                                <Select
-                                  fullWidth
-                                  labelId="dosage"
-                                  // defaultValue={0}
-                                  value={
-                                    formik.values.reminderPlans[index]
-                                      .reminderPlanTimes[reminderPlanTimeIndex]
-                                      .dosage
-                                  }
-                                  onChange={(newValue) => {
-                                    handleChangeDosage(
-                                      index,
-                                      reminderPlanTimeIndex
-                                    )(newValue.target.value as number);
-                                  }}>
-                                  {Array.from(Array(10).keys()).map(
-                                    (number) => (
-                                      <MenuItem key={number} value={number}>
-                                        {number}
-                                      </MenuItem>
-                                    )
-                                  )}
-                                </Select>
-                              </Grid>
-                              <Grid item xs={6} md={3}>
-                                <InputLabel id="dosage-time">Time</InputLabel>
-                                <TimePicker
-                                  label="Dosage time"
-                                  value={convertHoursMinutesStringToDate(
-                                    reminderPlanTime.time
-                                  )}
-                                  onChange={(newValue: Date | null) => {
-                                    handleReminderPlanTimeDosageTime(
-                                      index,
-                                      reminderPlanTimeIndex
-                                    )(newValue as Date);
-                                  }}
-                                  renderInput={(props) => (
-                                    <TextField
-                                      variant="outlined"
-                                      size="medium"
-                                      sx={{
-                                        marginTop: 0,
-                                      }}
-                                      {...props}
-                                    />
-                                  )}
-                                />
-                              </Grid>
-                            </Grid>
-                          )
-                        )}
-                      </>
-                    )}
-                    <Button onClick={handlePlanClose}>Save</Button>
-                  </CustomModal>
-                  {/* <Grid container spacing={4}>
-                    <Grid item xs={6}>
-                      <DatePicker
-                        label="Start Date"
-                        value={formik.values.reminderPlans[index].startDate}
-                        onChange={(date) => {
-                          handleStartDateChange(index)(date);
-                        }}
-                        renderInput={(props) => (
-                          <TextField variant="outlined" {...props} />
-                        )}
-                      />
-                    </Grid>
-                    <Grid item xs={6}>
-                      <DatePicker
-                        label="End Date"
-                        value={formik.values.reminderPlans[index].endDate}
-                        onChange={(date) => {
-                          handleEndDateChange(index)(date);
-                        }}
-                        renderInput={(props) => (
-                          <TextField variant="outlined" {...props} />
-                        )}
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid item container xs={12} columnSpacing={2} rowSpacing={2}>
-                    <Grid item xs={12} md={2}>
-                      <InputLabel id="frequency-select">Frequency</InputLabel>
-                      <Select
-                        fullWidth
-                        labelId="frequency-select"
-                        // defaultValue={formik.values.reminderPlans[index].frequency}
-                        value={formik.values.reminderPlans[index].frequency}
-                        onChange={(e) => {
-                          handleSelectFrequency(index)(
-                            e.target.value as Frequency
-                          );
-                        }}>
-                        {FrequencyOptions.map((frequency, index) => (
-                          <MenuItem key={index} value={frequency.value}>
-                            {frequency.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </Grid>
-                    <Grid item xs={12} md={8} marginTop={1.8}>
-                      {reminderPlan.frequency === Frequency.INTERVAL ? (
-                        <>
-                          <Input
-                            name={`reminderPlans[${index}].interval`}
-                            label="What is the interval?"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            variant="outlined"
-                            sx={{ width: "100%" }}
-                          />
-                        </>
-                      ) : reminderPlan.frequency === Frequency.SELECTED_DAYS ? (
-                        <>
-                          <MultipleSelect
-                            label="What days in a week?"
-                            options={DaysOfWeekOptions}
-                            onChange={handleMultiSelectChange(index)}
-                          />
-                        </>
-                      ) : null}
-                    </Grid>
-                    <Grid item xs={12} md={2}>
-                      <InputLabel id="times-per-day">
-                        How many times to take each day?
-                      </InputLabel>
-                      <Select
-                        fullWidth
-                        labelId="times-per-day"
-                        defaultValue={0}
-                        onChange={(newValue) => {
-                          handleAddReminderPlanTime(index)(
-                            newValue.target.value as number
-                          );
-                        }}>
-                        {Array.from(Array(10).keys()).map((number) => (
-                          <MenuItem key={number} value={number}>
-                            {number}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </Grid>
-                  </Grid>
-
-                  <Divider sx={{ p: "10px", width: "100%" }} />
-
-                  {formik.values.reminderPlans[index].reminderPlanTimes.length >
-                    0 && (
-                    <>
-                      {formik.values.reminderPlans[index].reminderPlanTimes.map(
-                        (reminderPlanTime, reminderPlanTimeIndex) => (
-                          <Grid
-                            container
-                            key={reminderPlanTimeIndex}
-                            columnSpacing={2}
-                            direction="row">
-                            <Grid item xs={6} md={3}>
-                              <InputLabel id="dosage">Dosage</InputLabel>
-                              <Select
-                                fullWidth
-                                labelId="dosage"
-                                defaultValue={0}
-                                onChange={(newValue) => {
-                                  handleChangeDosage(
-                                    index,
-                                    reminderPlanTimeIndex
-                                  )(newValue.target.value as number);
-                                }}>
-                                {Array.from(Array(10).keys()).map((number) => (
-                                  <MenuItem key={number} value={number}>
-                                    {number}
-                                  </MenuItem>
-                                ))}
-                              </Select>
-                            </Grid>
-                            <Grid item xs={6} md={3}>
-                              <InputLabel id="dosage-time">Time</InputLabel>
-                              <TimePicker
-                                label="Dosage time"
-                                value={convertHoursMinutesStringToDate(
-                                  reminderPlanTime.time
-                                )}
-                                onChange={(newValue: Date | null) => {
-                                  handleReminderPlanTimeDosageTime(
-                                    index,
-                                    reminderPlanTimeIndex
-                                  )(newValue as Date);
-                                }}
-                                renderInput={(props) => (
-                                  <TextField
-                                    variant="outlined"
-                                    size="medium"
-                                    sx={{
-                                      marginTop: 0,
-                                    }}
-                                    {...props}
-                                  />
-                                )}
-                              />
-                            </Grid>
-                          </Grid>
-                        )
-                      )}
-                    </>
-                  )} */}
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+                  )
+                )}
+              </>
+            )}
+            <Button onClick={handlePlanClose}>Save</Button>
+          </CustomModal>
         )}
 
-        <>
-          <Modal
-            open={open}
-            onClose={handleModalClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description">
-            <Card
+        <Modal
+          open={open}
+          onClose={handleModalClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          sx={{
+            "& .MuiModal-root": {
+              display: "flex",
+              width: "fit-content",
+              height: "fit-content",
+            },
+            display: "flex",
+            width: "100%",
+            height: "100%",
+            padding: 2,
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
+          <Card
+            // ref={modalRef}
+            sx={{
+              // top: "50%",
+              // left: "50%",
+              // transform: "translate(-50%, -50%)",
+
+              width: "1080px",
+              bgcolor: "background.paper",
+              border: "1px solid #00C2CB",
+              borderRadius: "20px",
+              // p: 4,
+            }}>
+            <Box
+              ref={modalRef}
               sx={{
-                position: "absolute" as "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: 1080,
-                bgcolor: "background.paper",
-                border: "1px solid #00C2CB",
-                borderRadius: "20px",
                 p: 4,
+                justifyContent: "center",
+                alignItems: "center",
               }}>
-              <Grid container spacing={4}>
+              <Grid
+                container
+                spacing={4}
+                sx={{
+                  alignItems: "center",
+                }}>
                 <Grid item xs={12} textAlign="center">
                   <Typography variant="h2" textAlign="center">
                     {formik.values.name} Prescription Form
@@ -862,8 +762,9 @@ const Prescribe = () => {
                     <Image
                       src={currentImage}
                       alt="QRCode"
-                      width={125}
-                      height={125}></Image>
+                      width={200}
+                      height={200}
+                    />
                   ) : null}
                 </Grid>
               </Grid>
@@ -921,25 +822,27 @@ const Prescribe = () => {
                   </TableBody>
                 ))}
               </Table>
-              <Grid
-                container
+            </Box>
+            <Grid
+              container
+              sx={{
+                justifyContent: "center",
+              }}
+              paddingTop={2}>
+              <Button
+                variant="contained"
+                onClick={handleCaptureModal}
                 sx={{
-                  justifyContent: "center",
-                }}
-                paddingTop={2}>
-                <Button
-                  variant="contained"
-                  sx={{
-                    backgroundColor: "#00C2CB",
-                  }}>
-                  Send to Chat
-                </Button>
-              </Grid>
-            </Card>
-          </Modal>
-        </>
-        {formik.values.reminderPlans.length > 0 && <div></div>}
-        {/* <CheckInteractions reminderPlan={formik.values.reminderPlans} /> */}
+                  backgroundColor: "#00C2CB",
+                }}>
+                Send to Chat
+              </Button>
+            </Grid>
+          </Card>
+        </Modal>
+        {formik.values.reminderPlans.length >= 2 && (
+          <CheckInteractions reminderPlan={formik.values.reminderPlans} />
+        )}
         <Grid
           item
           xs={12}

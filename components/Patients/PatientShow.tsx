@@ -40,6 +40,13 @@ const PatientShow = () => {
           "& .RaShow-card": {
             padding: "20px",
           },
+          width: "50%",
+          alignItems: "center",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignContent: "center",
+          justifyItems: "center",
+          alignSelf: "center",
         }}>
         <Card>
           <CardHeader
@@ -320,112 +327,7 @@ const PatientShow = () => {
                   />
                 </Grid>
               </Grid>
-              {/* <Grid item container sm={12} md={6}>
-                <Grid item xs={4}>
-                  Associated Doctors:
-                </Grid>
-                <Grid item xs={8}>
-                  <WithRecord
-                    render={(record) => {
-                      return record.patientAccount.doctorManagesPatients.map(
-                        (doctor: any, index: number) => (
-                          <ReferenceField
-                            source={`patientAccount.doctorManagesPatients[${index}].doctorAccountId`}
-                            reference="doctors"
-                            key={index}
-                          />
-                        )
-                      );
-                    }}
-                  />
-                </Grid>
-              </Grid> */}
             </Grid>
-            {/* <Typography
-              variant="h4"
-              color="primary"
-              paddingLeft={1}
-              marginBottom={4}>
-              Associated Patients:
-            </Typography> */}
-            {/* <Grid container spacing={4} paddingLeft={4}>
-              <Grid item container md={6} sm={12}>
-                <Grid item xs={4}>
-                  Doctor Username:
-                </Grid>
-                <Grid item xs={8}>
-                  <WithRecord
-                    render={(record: User) => (
-                      <Typography
-                        variant="body1"
-                        color="secondary"
-                        fontWeight="700">
-                        {record.operatorAccount
-                          ? record.operatorAccount.username
-                          : "Not available"}
-                      </Typography>
-                    )}
-                  />
-                </Grid>
-              </Grid>
-              <Grid item container sm={12} md={6}>
-                <Grid item xs={4}>
-                  Doctor Phone number:
-                </Grid>
-                <Grid item xs={8}>
-                  <WithRecord
-                    render={(record: User) => (
-                      <Typography
-                        variant="body1"
-                        color="secondary"
-                        fontWeight="700">
-                        {record.operatorAccount?.phoneNumber
-                          ? record.operatorAccount.phoneNumber
-                          : "Not available"}
-                      </Typography>
-                    )}
-                  />
-                </Grid>
-              </Grid>
-              <Grid item container sm={12} md={6}>
-                <Grid item xs={4}>
-                  Works at:
-                </Grid>
-                <Grid item xs={8}>
-                  <WithRecord
-                    render={(record: User) => (
-                      <Typography
-                        variant="body1"
-                        color="secondary"
-                        fontWeight="700">
-                        {record.operatorAccount
-                          ? record.operatorAccount.hospital.name
-                          : "Not available"}
-                      </Typography>
-                    )}
-                  />
-                </Grid>
-              </Grid>
-              <Grid item container sm={12} md={6}>
-                <Grid item xs={4}>
-                  Hospital Address:
-                </Grid>
-                <Grid item xs={8}>
-                  <WithRecord
-                    render={(record: User) => (
-                      <Typography
-                        variant="body1"
-                        color="secondary"
-                        fontWeight="700">
-                        {record.operatorAccount?.hospital.description
-                          ? record.operatorAccount.hospital.description
-                          : "Not available"}
-                      </Typography>
-                    )}
-                  />
-                </Grid>
-              </Grid>
-            </Grid> */}
           </CardContent>
           <CardActionArea
             sx={{

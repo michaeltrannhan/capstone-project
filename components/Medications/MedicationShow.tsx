@@ -64,6 +64,7 @@ const MedicationShow = () => {
                 source="id"
                 variant="body2"
                 fontWeight={700}
+                fontSize={20}
                 color={(theme) => theme.palette.info.main}
               />
             </Grid>

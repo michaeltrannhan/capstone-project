@@ -89,7 +89,11 @@ const ProfilePage = () => {
       }),
     {
       enabled: !!auth.code,
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
+      // refetchInterval: 3000,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+      retry: 3,
     }
   );
 

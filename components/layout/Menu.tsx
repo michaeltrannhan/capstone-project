@@ -70,13 +70,6 @@ export const CustomMenu = () => {
           leftIcon={<FontAwesomeIcon icon={faMessage} size="lg" />}
         />
       ) : null}
-      {permissions.name === "DOCTOR" && (
-        <Menu.Item
-          to="/patient-report"
-          primaryText="Patient Report"
-          leftIcon={<FontAwesomeIcon icon={faPrescription} size="lg" />}
-        />
-      )}
     </Menu>
   );
 };

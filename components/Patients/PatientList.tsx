@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import {
   List,
   TextField,
@@ -8,6 +8,8 @@ import {
   EditButton,
   ShowButton,
   usePermissions,
+  WithRecord,
+  useRedirect,
 } from "react-admin";
 import ActionToolbar from "../commons/ListActionToolbar";
 import { Role } from "../utils/commons";
@@ -18,6 +20,8 @@ import Head from "next/head";
 
 const PatientList = () => {
   const { permissions, isLoading } = usePermissions<Role, any>();
+  const code = localStorage.getItem("code");
+  const redirect = useRedirect();
   if (isLoading) {
     return <p>Loading...</p>;
   } else
@@ -140,7 +144,7 @@ const PatientList = () => {
           </List>
         ) : (
           <List
-            resource="patients"
+            resource={`patients/associated-patients/${code}`}
             filters={ListFilters("Search for any patients", "Search")}
             actions={<ListAction />}
             sx={{
@@ -234,36 +238,19 @@ const PatientList = () => {
                 label="Username"
                 emptyText="Not available"
               />
-              {/* <ActionToolbar>
-                {permissions.name === "ADMIN" ||
-                permissions.name === "HOSPITAL_ADMIN" ? (
-                  <EditButton
-                    variant="text"
-                    sx={{
-                      width: "100%",
-                      padding: 0,
-                    }}
-                  />
-                ) : null}
-                <ShowButton variant="text" />
-              </ActionToolbar> */}
-              {permissions.name === "DOCTOR" ? (
-                <ShowButton variant="text" />
-              ) : (
-                <ActionToolbar>
-                  {permissions.name === "ADMIN" ||
-                  permissions.name === "HOSPITAL_ADMIN" ? (
-                    <EditButton
-                      variant="text"
-                      sx={{
-                        width: "100%",
-                        padding: 0,
-                      }}
-                    />
-                  ) : null}
-                  <ShowButton variant="text" />
-                </ActionToolbar>
-              )}
+
+              <WithRecord
+                render={(record) => {
+                  return (
+                    <Button
+                      key={record.id}
+                      onClick={() => redirect("show", "patients", record.id)}
+                      variant="text">
+                      View
+                    </Button>
+                  );
+                }}
+              />
             </Datagrid>
           </List>
         )}
