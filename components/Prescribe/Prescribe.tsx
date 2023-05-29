@@ -102,7 +102,7 @@ const Prescribe = () => {
         const billData = new FormData();
         billData.append("file", billImage);
         await api
-          .post(`/medication-plans/${res?.id}`, billData, {
+          .post(`/medication-plans/upload/${res?.id}`, billData, {
             headers: {
               "Content-Type": "multipart/form-data",
               "Access-Control-Allow-Origin": "*",
@@ -111,7 +111,7 @@ const Prescribe = () => {
             },
           })
           .then((billRes) => {
-            console.log(billRes);
+            // console.log(billRes);
             notify("Uploaded bill successfully", { type: "success" });
           })
           .catch((err) => {
@@ -155,10 +155,7 @@ const Prescribe = () => {
       handleDoctorIdChange(data?.id as number);
     }
     const patientId = value.id;
-    // console.log(patientId);
-    // const patientName = `${value.firstName} ${value.lastName}`;
-    // console.log(value.lastName);
-    // formik.values.name = patientName;
+
     formik.values.patientId = patientId;
     formik.setValues(formik.values);
   };
@@ -289,13 +286,13 @@ const Prescribe = () => {
       const canvas = await html2canvas(modalElement, { useCORS: true });
       canvas.toBlob((blob) => {
         const file = new File([blob as Blob], "bill.png", {
-          type: "image/png",
+          type: blob?.type,
         });
         console.log(file);
         setBillImage(file);
-      });
-      const imageURL = canvas.toDataURL();
-      console.log(imageURL);
+      }, "image/png");
+      // const imageURL = canvas.toDataURL();
+      // console.log(imageURL);
     }
   };
 
@@ -461,7 +458,7 @@ const Prescribe = () => {
               sx={{
                 "& .MuiTableCell-head": {
                   backgroundColor: "rgba(0, 194, 203, 0.2)",
-                  "& th:first-child": {
+                  "& th:first-of-type": {
                     borderTopLeftRadius: "20px",
                   },
                   "& th:last-child": {

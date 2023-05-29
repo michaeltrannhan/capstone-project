@@ -144,17 +144,19 @@ const Chat = () => {
               }}>
               Chats
             </Typography>
-            <Box
+            {/* <Box
               sx={{
                 borderColor: "divider",
                 boxShadow: "-moz-initial",
                 padding: 2,
                 height: "100%",
-              }}>
+              }}> */}
               <Tabs
                 orientation="vertical"
                 variant="scrollable"
                 value={value}
+                scrollButtons
+                visibleScrollbar
                 onChange={handleChange}
                 aria-label="Vertical tabs example"
                 sx={{
@@ -192,7 +194,7 @@ const Chat = () => {
                   />
                 ))}
               </Tabs>
-            </Box>
+            {/* </Box> */}
           </Grid>
           <Grid
             item
