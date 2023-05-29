@@ -22,6 +22,7 @@ const PatientList = () => {
   const { permissions, isLoading } = usePermissions<Role, any>();
   const code = localStorage.getItem("code");
   const redirect = useRedirect();
+
   if (isLoading) {
     return <p>Loading...</p>;
   } else
@@ -36,6 +37,7 @@ const PatientList = () => {
             resource="patients"
             filters={ListFilters("Search for any patients", "Search")}
             actions={<ListAction />}
+            
             sx={{
               width: "100%",
               "& .RaList-main	": {
@@ -62,7 +64,6 @@ const PatientList = () => {
                 borderTopLeftRadius: "20px",
                 borderTopRightRadius: "20px",
               },
-              "": {},
             }}>
             <Datagrid
               sx={{

@@ -327,7 +327,7 @@ const ChatThread = (props: Props) => {
                     />
                   )}
                 />
-              </form>{" "}
+              </form>
             </Grid>
           </Grid>
         </Item>

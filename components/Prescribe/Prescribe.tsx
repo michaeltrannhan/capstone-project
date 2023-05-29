@@ -60,12 +60,14 @@ import CheckInteractions from "./CheckInteractions";
 import CustomModal from "./Modal";
 import ReminderPlanActions from "./ReminderPlanActions";
 import html2canvas from "html2canvas";
+import api from "../../services";
 
 const Prescribe = () => {
   const [currentMedication, setCurrentMedication] = useState<Medication | null>(
     null
   );
   const [currentImage, setCurrentImage] = useState<string>("");
+  const [billImage, setBillImage] = useState<File | null>(null);
   const [currentPlanIndex, setCurrentPlanIndex] = useState<number>(0);
   const [openPlan, setOpenPlan] = useState<boolean>(false);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -96,6 +98,26 @@ const Prescribe = () => {
     // console.log(JSON.stringify(values, null, 2));
     try {
       const res = await MedicationPlanServices.createMedicationPlan(values);
+      if (billImage) {
+        const billData = new FormData();
+        billData.append("file", billImage);
+        await api
+          .post(`/medication-plans/${res?.id}`, billData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods":
+                "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+            },
+          })
+          .then((billRes) => {
+            console.log(billRes);
+            notify("Uploaded bill successfully", { type: "success" });
+          })
+          .catch((err) => {
+            notify(`Failed to upload bill, error: ${err}`, { type: "error" });
+          });
+      }
       console.log(res);
       return Promise.resolve(res).then(() => {
         notify("Created new medication plan successfully", { type: "success" });
@@ -263,15 +285,15 @@ const Prescribe = () => {
   const handleCaptureModal = async () => {
     if (modalRef.current) {
       const modalElement = modalRef.current;
-      // const modalBounds = modalElement.getBoundingClientRect();
-      // const canvas = await html2canvas(modalElement, {
-      //   x: modalBounds.left,
-      //   y: modalBounds.top,
-      //   width: modalBounds.width,
-      //   height: modalBounds.height,
-      //   useCORS: true,
-      // });
+
       const canvas = await html2canvas(modalElement, { useCORS: true });
+      canvas.toBlob((blob) => {
+        const file = new File([blob as Blob], "bill.png", {
+          type: "image/png",
+        });
+        console.log(file);
+        setBillImage(file);
+      });
       const imageURL = canvas.toDataURL();
       console.log(imageURL);
     }
