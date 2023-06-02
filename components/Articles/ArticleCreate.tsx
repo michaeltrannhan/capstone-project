@@ -120,28 +120,41 @@ const ArticleCreate = () => {
             padding: "24px",
           },
         }}>
-        <Form onSubmit={articleCreate}>
+        <SimpleForm onSubmit={articleCreate}>
           <Typography variant="h4" sx={{ textAlign: "center" }}>
             Create Article
           </Typography>
 
-          <TextInput source="title" label="Title" fullWidth />
+          <TextInput source="title" label="Title" fullWidth required />
           <AutocompleteArrayInput
             source="tags"
             label="Tags"
+            aria-required="true"
             choices={tag}
+            isRequired
             onCreate={(e) => {
               console.log(e);
             }}
           />
-          <TextInput source="content" label="Content" fullWidth multiline />
-          <ImageInput source="images" label="Related pictures" accept="image/*">
+          <TextInput
+            source="content"
+            label="Content"
+            fullWidth
+            multiline
+            required
+          />
+          <ImageInput
+            source="images"
+            label="Related pictures"
+            isRequired
+            accept="image/*">
             <ImageField source="src" title="title" />
           </ImageInput>
-          <Button type="submit" variant="contained">
+          {/* <Button type="submit" variant="contained">
             Submit
-          </Button>
-        </Form>
+          </Button> */}
+          {/* <DevTool /> */}
+        </SimpleForm>
       </Create>
     </>
   );

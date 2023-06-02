@@ -3,6 +3,5 @@
     "other": "on",
     "comments": "off",
     "strings": "off"
-  },
-  "typescript.tsdk": "node_modules/typescript/bin"
+  }
 }

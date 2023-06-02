@@ -236,7 +236,9 @@ const PatientShow = () => {
                         variant="body1"
                         color="secondary"
                         fontWeight="700">
-                        {record.birthday ? record.birthday : "Not available"}
+                        {record.birthday
+                          ? dayjs(record.birthday).format("DD/MM/YYYY")
+                          : "Not available"}
                       </Typography>
                     )}
                   />

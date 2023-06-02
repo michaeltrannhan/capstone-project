@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import {
   Form,
   Create,
@@ -14,9 +14,12 @@ import {
   DateInput,
   ShowButton,
   WithRecord,
+  useNotify,
 } from "react-admin";
 import SaveAsTwoToneIcon from "@mui/icons-material/SaveAsTwoTone";
 import PreviewTwoToneIcon from "@mui/icons-material/PreviewTwoTone";
+import RotateLeftTwoToneIcon from "@mui/icons-material/RotateLeftTwoTone";
+import api from "../../services";
 
 type CustomTextFieldProps = {
   source: string;
@@ -42,6 +45,18 @@ const CustomTextInput = (props: CustomTextFieldProps) => {
 };
 
 const DoctorEdit = () => {
+  const notify = useNotify();
+  const handleResetPassword = (id: number) => {
+    console.log("Reset Password");
+    api
+      .patch(`user-accounts/reset-pwd/${id}`)
+      .then(() => {
+        notify("Password Reset Successfully", { type: "success" });
+      })
+      .catch((err) => {
+        notify(`Password Reset Failed with error: ${err}`, { type: "error" });
+      });
+  };
   return (
     <Edit
       resource="doctors"
@@ -188,12 +203,35 @@ const DoctorEdit = () => {
           </Grid>
           <Grid
             item
-            xs={12}
+            xs={6}
             sx={{
-              alignContent: "center",
-              justifyContent: "center",
-              justifyItems: "center",
-              textAlign: "center",
+              alignContent: "space-between",
+              justifyContent: "space-between",
+              justifyItems: "space-between",
+              textAlign: "left",
+            }}>
+            <WithRecord
+              render={(record) => (
+                <Button
+                  variant="outlined"
+                  sx={{
+                    borderRadius: "20px",
+                    backgroundColor: "",
+                  }}
+                  onClick={(e) => {
+                    handleResetPassword(record?.id as number);
+                  }}
+                  startIcon={<RotateLeftTwoToneIcon />}>
+                  Reset Password
+                </Button>
+              )}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sx={{
+              textAlign: "right",
             }}>
             <SaveButton
               label="Update"

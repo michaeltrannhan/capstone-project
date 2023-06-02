@@ -5,7 +5,6 @@ import {
   EditButton,
   ImageField,
   Show,
-  SimpleShowLayout,
   TextField,
   WithRecord,
   useRecordContext,
@@ -49,13 +48,8 @@ const DoctorShow = () => {
           alignContent: "center",
           justifyItems: "center",
           alignSelf: "center",
-          // overflowY: "hidden",
         }}>
-        <Card
-          sx={{
-            // position: "relative",
-            // height: "calc(100vh - 12rem)",
-          }}>
+        <Card>
           <CardHeader
             avatar={
               <WithRecord
@@ -118,10 +112,12 @@ const DoctorShow = () => {
           />
 
           <CardContent
-            sx={{
-              // overflowY: "scroll",
-              // height: "inherit",
-            }}>
+            sx={
+              {
+                // overflowY: "scroll",
+                // height: "inherit",
+              }
+            }>
             <Typography
               variant="h4"
               color="primary"
@@ -346,91 +342,6 @@ const DoctorShow = () => {
               Doctor Contact Information:
             </Typography>
             <Grid container spacing={2} paddingLeft={2}>
-              <Grid item container md={6} sm={12}>
-                <Grid item xs={4}>
-                  Doctor Username:
-                </Grid>
-                <Grid item xs={8}>
-                  <WithRecord
-                    render={(record: User) => (
-                      <Typography
-                        variant="body1"
-                        color="secondary"
-                        fontWeight="700">
-                        {record.operatorAccount
-                          ? record.operatorAccount.username
-                          : "Not available"}
-                      </Typography>
-                    )}
-                  />
-                </Grid>
-              </Grid>
-              <Grid item container sm={12} md={6}>
-                <Grid item xs={4}>
-                  Doctor Phone number:
-                </Grid>
-                <Grid item xs={8}>
-                  <WithRecord
-                    render={(record: User) => (
-                      <Typography
-                        variant="body1"
-                        color="secondary"
-                        fontWeight="700">
-                        {record.operatorAccount?.phoneNumber
-                          ? record.operatorAccount.phoneNumber
-                          : "Not available"}
-                      </Typography>
-                    )}
-                  />
-                </Grid>
-              </Grid>
-              <Grid item container sm={12} md={6}>
-                <Grid item xs={4}>
-                  Works at:
-                </Grid>
-                <Grid item xs={8}>
-                  <WithRecord
-                    render={(record: User) => (
-                      <Typography
-                        variant="body1"
-                        color="secondary"
-                        fontWeight="700">
-                        {record.operatorAccount
-                          ? record.operatorAccount.hospital.name
-                          : "Not available"}
-                      </Typography>
-                    )}
-                  />
-                </Grid>
-              </Grid>
-              <Grid item container sm={12} md={6}>
-                <Grid item xs={4}>
-                  Hospital Address:
-                </Grid>
-                <Grid item xs={8}>
-                  <WithRecord
-                    render={(record: User) => (
-                      <Typography
-                        variant="body1"
-                        color="secondary"
-                        fontWeight="700">
-                        {record.operatorAccount?.hospital.description
-                          ? record.operatorAccount.hospital.description
-                          : "Not available"}
-                      </Typography>
-                    )}
-                  />
-                </Grid>
-              </Grid>
-            </Grid>
-            <Typography
-              variant="h4"
-              color="primary"
-              paddingLeft={1}
-              marginBottom={4}>
-              Associated Patients:
-            </Typography>
-            <Grid container spacing={4} paddingLeft={4}>
               <Grid item container md={6} sm={12}>
                 <Grid item xs={4}>
                   Doctor Username:

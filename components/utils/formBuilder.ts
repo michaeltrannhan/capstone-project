@@ -17,7 +17,7 @@ export const createBaseReminderPlan = (
 ): BaseReminderPlanForm => {
   const startDate = new Date();
   const endDate = new Date();
-  endDate.setDate(endDate.getDate() + 1);
+  endDate.setDate(endDate.getDate() + 7);
   return {
     medicationName,
     medicationId,

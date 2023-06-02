@@ -37,7 +37,6 @@ const PatientList = () => {
             resource="patients"
             filters={ListFilters("Search for any patients", "Search")}
             actions={<ListAction />}
-            
             sx={{
               width: "100%",
               "& .RaList-main	": {
@@ -231,12 +230,6 @@ const PatientList = () => {
                 source="patientAccount.phoneNumber"
                 sortable={false}
                 label="Phone number"
-                emptyText="Not available"
-              />
-              <TextField
-                source="patientAccount.username"
-                sortable={false}
-                label="Username"
                 emptyText="Not available"
               />
 

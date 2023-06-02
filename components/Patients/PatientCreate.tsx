@@ -3,8 +3,10 @@ import Head from "next/head";
 import React from "react";
 import {
   Create,
+  DateInput,
   Form,
   SaveButton,
+  SelectInput,
   TextInput,
   useCreate,
   useNotify,
@@ -18,7 +20,7 @@ const PatientCreate = () => {
   const redirect = useRedirect();
   const notify = useNotify();
   const patientCreate = (data: any) => {
-    create("auth/patient/register", { data });
+    create("patients", { data });
     if (error) {
       return notify(<Alert severity="error">New patient added</Alert>);
     }
@@ -33,12 +35,12 @@ const PatientCreate = () => {
       <Create
         redirect="list"
         sx={{
-          padding: "20px",
-          marginTop: "5%",
+          padding: "10px",
+          // marginTop: "5%",
           marginBottom: "10px",
           alignItems: "center",
           // textAlign: "center",
-          width: "70%",
+          width: "40%",
           flexDirection: "column",
           justifyContent: "center",
           alignContent: "center",
@@ -55,20 +57,59 @@ const PatientCreate = () => {
             Create a patient account
           </Typography>
           <br />
-          Patient phone number
           <TextInput
             variant="outlined"
             label="Phone Number"
             source="phoneNumber"
+            required
             fullWidth
           />
-          Patient Password
           <TextInput
             variant="outlined"
-            label="Password"
-            source="password"
+            label="First Name"
+            source="firstName"
+            required
             fullWidth
-            type="password"
+          />
+          <TextInput
+            variant="outlined"
+            label="Last Name"
+            source="lastName"
+            required
+            fullWidth
+          />
+          <TextInput
+            variant="outlined"
+            source="address"
+            label="Address"
+            required
+            fullWidth
+          />
+          <SelectInput
+            source="gender"
+            choices={[
+              { id: "MALE", name: "Male" },
+              { id: "FEMALE", name: "Female" },
+              { id: "OTHER", name: "Other" },
+            ]}
+          />
+          <TextInput
+            variant="outlined"
+            source="socialSecurityNumber"
+            label="SSN"
+            fullWidth
+          />
+          <TextInput
+            variant="outlined"
+            source="nationality"
+            label="Nationality"
+            fullWidth
+          />
+          <DateInput
+            variant="outlined"
+            source="birthday"
+            label="Birthday"
+            fullWidth
           />
           <SaveButton />
         </Form>

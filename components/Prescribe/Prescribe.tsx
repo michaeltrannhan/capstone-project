@@ -5,6 +5,7 @@ import {
   FrequencyOptions,
   Medication,
   MedicationPlanForm,
+  MedicationPlanFormWithId,
   SelectedDaysReminderPlanForm,
 } from "../utils/commons";
 import QRCode from "qrcode";
@@ -40,18 +41,20 @@ import {
   Chip,
   TableContainer,
   Paper,
+  ButtonGroup,
 } from "@mui/material";
 import { useEffect, useMemo, useState, useRef } from "react";
 import MedicationPlanServices from "./MedicationPlanServices";
 import MedicationSearchBar from "./MedicationSearchBar";
-
+import AddIcon from "@mui/icons-material/Add";
+import SearchIcon from "@mui/icons-material/Search";
 import { useGetIdentity, useNotify, useRedirect } from "react-admin";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 import MultipleSelect from "../form-components/MultiSelect";
 import DebouncedInput from "../form-components/DebouncedInput";
-import { convertTimeToHoursMinutes } from "../utils/commons";
+import { convertTimeToHoursMinutes, ReminderPlan } from "../utils/commons";
 import { convertHoursMinutesStringToDate } from "../utils/commons";
 import Image from "next/image";
 import Head from "next/head";
@@ -61,6 +64,7 @@ import CustomModal from "./Modal";
 import ReminderPlanActions from "./ReminderPlanActions";
 import html2canvas from "html2canvas";
 import api from "../../services";
+import { type } from "os";
 
 const Prescribe = () => {
   const [currentMedication, setCurrentMedication] = useState<Medication | null>(
@@ -71,14 +75,17 @@ const Prescribe = () => {
   const [currentPlanIndex, setCurrentPlanIndex] = useState<number>(0);
   const [openPlan, setOpenPlan] = useState<boolean>(false);
   const modalRef = useRef<HTMLDivElement>(null);
+  const [currentMedPlanId, setCurrentMedPlanId] = useState<number | null>(null);
+  const [checkInteractions, setCheckInteractions] = useState<number>(0);
   const [modalLoaded, setModalLoaded] = useState(false);
   const redirect = useRedirect();
+  const doctorId = parseInt(localStorage.getItem("id") as string, 10);
   const handlePlanOpen = () => setOpenPlan(true);
   const handlePlanClose = () => setOpenPlan(false);
   const [open, setOpen] = useState(false);
   const handleModalOpen = () => {
     setOpen(true);
-    handleGenerateQRCode();
+    // handleGenerateQRCode();
   };
   const handleModalClose = () => setOpen(false);
   const generateQR = async (text: string) => {
@@ -98,31 +105,11 @@ const Prescribe = () => {
     // console.log(JSON.stringify(values, null, 2));
     try {
       const res = await MedicationPlanServices.createMedicationPlan(values);
-      if (billImage) {
-        const billData = new FormData();
-        billData.append("file", billImage);
-        await api
-          .post(`/medication-plans/upload/${res?.id}`, billData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              "Access-Control-Allow-Origin": "*",
-              "Access-Control-Allow-Methods":
-                "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-            },
-          })
-          .then((billRes) => {
-            // console.log(billRes);
-            notify("Uploaded bill successfully", { type: "success" });
-          })
-          .catch((err) => {
-            notify(`Failed to upload bill, error: ${err}`, { type: "error" });
-          });
-      }
+
       console.log(res);
-      return Promise.resolve(res).then(() => {
-        notify("Created new medication plan successfully", { type: "success" });
-        actions.resetForm();
-      });
+      setCurrentMedPlanId(res?.id as number);
+      handleGenerateQRCode(res?.id as number);
+      return Promise.resolve(res);
     } catch (error) {
       console.log(error);
     }
@@ -142,15 +129,19 @@ const Prescribe = () => {
     formik.setValues(formik.values);
   };
 
-  const handleGenerateQRCode = () => {
+  const handleGenerateQRCode = (medicationPlanId: number) => {
     const medicationPlan = formik.values;
-    const stringifiedMedicationPlan = JSON.stringify(medicationPlan);
-    // console.log(stringifiedMedicationPlan);
+    const medicationPlanWithId: MedicationPlanFormWithId = {
+      ...medicationPlan,
+      medicationPlanId: medicationPlanId,
+    };
+    const stringifiedMedicationPlan = JSON.stringify(medicationPlanWithId);
+
+    console.log(stringifiedMedicationPlan);
     generateQR(stringifiedMedicationPlan);
   };
 
   const handleCurrentPatientInfo = (value: any) => {
-    // console.log(value);
     if (!isLoading) {
       handleDoctorIdChange(data?.id as number);
     }
@@ -260,6 +251,7 @@ const Prescribe = () => {
   };
 
   const handleAddReminderPlan = (medication: Medication) => {
+    handleDoctorIdChange(doctorId);
     if (medication.id === undefined) return;
     if (
       formik.values.reminderPlans.find(
@@ -279,20 +271,40 @@ const Prescribe = () => {
     formik.setValues({ ...formik.values });
   };
 
+  const handleCheckInteractions = () => {
+    setCheckInteractions((prev) => prev + 1);
+  };
+
   const handleCaptureModal = async () => {
     if (modalRef.current) {
       const modalElement = modalRef.current;
 
       const canvas = await html2canvas(modalElement, { useCORS: true });
+      const billData = new FormData();
+
       canvas.toBlob((blob) => {
         const file = new File([blob as Blob], "bill.png", {
           type: blob?.type,
         });
-        console.log(file);
-        setBillImage(file);
+        billData.append("file", file as File);
+        api
+          .post(`/medication-plans/upload/${currentMedPlanId}`, billData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods":
+                "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+            },
+          })
+          .then((billRes) => {
+            console.log(billRes.data);
+            notify("Uploaded bill successfully", { type: "success" });
+            formik.resetForm();
+          })
+          .catch((err) => {
+            notify(`Error uploading bill, error: ${err}`, { type: "error" });
+          });
       }, "image/png");
-      // const imageURL = canvas.toDataURL();
-      // console.log(imageURL);
     }
   };
 
@@ -418,32 +430,45 @@ const Prescribe = () => {
           xs={12}
           display="flex"
           // direction="row"
-          justifyContent="center"
+          justifyContent="space-between"
           alignItems="center"
           alignContent="center">
-          <Grid item xs={6} md={2}>
+          <Grid item xs={2}>
             <Typography variant="body1" fontSize={20}>
               Enter Medication Name
             </Typography>
           </Grid>
-          <Grid item xs>
+          <Grid item xs={6}>
             <MedicationSearchBar
               onChange={(e: any, newValue: Medication) => {
                 setCurrentMedication(newValue);
               }}
             />
           </Grid>
-          <Grid item xs>
-            <Button
-              variant="outlined"
-              sx={{ height: "100%" }}
-              onClick={(e) => {
-                currentMedication
-                  ? handleAddReminderPlan(currentMedication)
-                  : null;
-              }}>
-              Add Medication
-            </Button>
+          <Grid
+            item
+            xs
+            sx={{
+              justifySelf: "end",
+              textAlign: "right",
+            }}>
+            <ButtonGroup variant="contained">
+              <Button
+                startIcon={<AddIcon />}
+                sx={{ height: "100%" }}
+                onClick={(e) => {
+                  currentMedication
+                    ? handleAddReminderPlan(currentMedication)
+                    : null;
+                }}>
+                Add Medication
+              </Button>
+              <Button
+                startIcon={<SearchIcon />}
+                onClick={handleCheckInteractions}>
+                Check interactions
+              </Button>
+            </ButtonGroup>
           </Grid>
         </Grid>
 
@@ -497,6 +522,8 @@ const Prescribe = () => {
                           setCurrentPlanIndex(
                             index === formik.values.reminderPlans.length - 1
                               ? formik.values.reminderPlans.length - 2
+                              : index === 0
+                              ? index + 1
                               : index - 1
                           );
                           handleDeleteReminderPlan(currentPlanIndex);
@@ -512,6 +539,9 @@ const Prescribe = () => {
 
         {formik.values.reminderPlans.length > 0 && (
           <CustomModal open={openPlan} handleClose={handlePlanClose}>
+            <Typography variant="h4" sx={{ marginY: "10px" }}>
+              Change Reminder Plan Details
+            </Typography>
             <Grid container spacing={1} alignContent="space-between">
               <Grid item xs={6}>
                 <DatePicker
@@ -609,8 +639,8 @@ const Prescribe = () => {
                     );
                   }}>
                   {Array.from(Array(10).keys()).map((number) => (
-                    <MenuItem key={number} value={number}>
-                      {number}
+                    <MenuItem key={number} value={number + 1}>
+                      {number + 1}
                     </MenuItem>
                   ))}
                 </Select>
@@ -850,6 +880,7 @@ const Prescribe = () => {
               paddingTop={2}>
               <Button
                 variant="contained"
+                type="submit"
                 onClick={handleCaptureModal}
                 sx={{
                   backgroundColor: "#00C2CB",
@@ -862,6 +893,7 @@ const Prescribe = () => {
         {formik.values.reminderPlans.length >= 2 && (
           <CheckInteractions reminderPlan={formik.values.reminderPlans} />
         )}
+
         <Grid
           item
           xs={12}
@@ -871,9 +903,8 @@ const Prescribe = () => {
             justifyContent: "center",
             bottom: "0",
           }}>
-          <Button onClick={handleModalOpen}>Generate prescription</Button>
-          {/* <Button onClick={handleGenerateQRCode}>Save</Button> */}
           <Button type="submit"> Submit </Button>
+          <Button onClick={handleModalOpen}>Generate prescription</Button>
         </Grid>
       </Grid>
     </form>

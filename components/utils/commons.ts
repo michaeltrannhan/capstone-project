@@ -254,6 +254,10 @@ export type MedicationPlanForm = {
   doctorId: number;
 };
 
+export type MedicationPlanFormWithId = MedicationPlanForm & {
+  medicationPlanId: number;
+};
+
 export type SelectOptions = {
   value: string;
   label: string;

@@ -155,9 +155,8 @@ const MedicationPlanList = () => {
           <DateField source="createdAt" />
           <DateField source="updatedAt" />
           <BooleanField source="completed" sortable={false} />
-          <ActionToolbar>
-            {permissions.name === "ADMIN" ||
-            permissions.name === "HOSPITAL_ADMIN" ? (
+          {permissions.name === "DOCTOR" ? null : (
+            <ActionToolbar>
               <EditButton
                 variant="text"
                 sx={{
@@ -165,9 +164,9 @@ const MedicationPlanList = () => {
                   padding: 0,
                 }}
               />
-            ) : null}
-            <ShowButton variant="text" />
-          </ActionToolbar>
+              <ShowButton variant="text" />
+            </ActionToolbar>
+          )}
           <WithRecord
             render={(record) => {
               return (
