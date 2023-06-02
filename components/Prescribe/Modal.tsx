@@ -33,7 +33,7 @@ const CustomModal = (props: Props) => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          maxWidth: "840px",
+          width: "1080px",
           bgcolor: "background.paper",
           //   border: "1px solid #00C2CB",
           borderRadius: "20px",

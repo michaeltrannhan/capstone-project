@@ -215,7 +215,8 @@ const ChatThread = (props: Props) => {
                     sx={{
                       borderRadius: "32px",
                       padding: 2,
-                      textAlign: "center",
+                      textAlign: "start",
+                      position: "relative",
 
                       color:
                         message.senderCode === props.doctorId ? "#fff" : "#000",
@@ -224,29 +225,48 @@ const ChatThread = (props: Props) => {
                           ? "rgb(0, 132, 255)"
                           : "#ECF3FF",
                     }}>
-                    {isValidHttpUrl(message.content) ? (
-                      <Box
-                        sx={{
-                          // position: "relative",
-                          width: 240,
-                          height: 240,
-                          maxWidth: "480px",
-                          maxHeight: "480px",
-                        }}>
-                        <Image
-                          alt="chat-image"
-                          src={message.content}
-                          fill
-                          sizes="100vw"
-                          quality={100}
-                          style={{
-                            // position: "inherit",
-                            objectFit: "contain",
-                            padding: 3,
-                            borderRadius: "32px",
-                          }}
-                        />
-                      </Box>
+                    {/* {isValidHttpUrl(message.content) ? (
+                      // <Image
+                      //   alt="chat-image"
+                      //   src={message.content}
+                      //   // layout="fill"
+                      //   width={240}
+                      //   height={240}
+                      //   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      //   quality={75}
+                      //   loading="eager"
+                      //   priority={true}
+                      //   style={{
+                      //     // position: "inherit",
+                      //     objectFit: "contain",
+                      //     padding: 0,
+                      //     borderRadius: "12px",
+                      //     margin: 0,
+                      //   }}
+                      // />adada
+                      <>dadadawd</>
+                    ) : (
+                      message.content
+                    )} */}
+                    {message.content.includes("http") ? (
+                      <Image
+                        alt="chat-image"
+                        src={message.content}
+                        // layout="fill"
+                        width={240}
+                        height={240}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        quality={75}
+                        loading="eager"
+                        priority={true}
+                        style={{
+                          // position: "inherit",
+                          objectFit: "contain",
+                          padding: 0,
+                          borderRadius: "12px",
+                          margin: 0,
+                        }}
+                      />
                     ) : (
                       message.content
                     )}
@@ -327,7 +347,7 @@ const ChatThread = (props: Props) => {
                     />
                   )}
                 />
-              </form>{" "}
+              </form>
             </Grid>
           </Grid>
         </Item>

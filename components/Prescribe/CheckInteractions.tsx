@@ -2,25 +2,53 @@ import React from "react";
 import { useQuery } from "react-query";
 import { ReminderPlanForm } from "../utils/commons";
 import api from "../../services";
-import { Box, Chip } from "@mui/material";
+import { Box, Chip, CircularProgress } from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Error";
 type Props = {
   reminderPlan: ReminderPlanForm[];
 };
+import * as _ from "lodash";
+interface Interactions {
+  reagentId: string;
+  name: string;
+  description: string;
+}
+interface Reactions {
+  id: string;
+  name: string;
+  interactions: Interactions[];
+}
+
+type Response = {
+  reactions: Reactions[];
+};
 
 const CheckInteractions = (props: Props) => {
   const medIds = props.reminderPlan.map((item) => item.medicationId);
+  const [descArr, setDescArr] = React.useState<string[]>([]);
   const {
     data: interactions,
     isLoading: interactionsLoading,
+    isFetching: interactionsFetching,
     error: interactionsError,
-  } = useQuery("interactions", () =>
+  } = useQuery<Response>("interactions", () =>
     api
       .get(`/medication-plans/check-interaction?ids=${medIds}`)
       .then((res) => res.data)
       .catch((err) => console.log(err))
   );
-  if (interactionsLoading) return <div>Loading...</div>;
+  if (interactionsFetching)
+    return (
+      <div>
+        <CircularProgress />
+      </div>
+    );
+  if (interactionsError) return <div>Error</div>;
+  const desc = interactions?.reactions.flatMap((reaction) =>
+    reaction.interactions.map((item) => item.description)
+  );
+  const uniqDesc = _.uniq(desc);
+  console.log(uniqDesc);
   // console.log(interactions.reactions);
   return (
     <Box
@@ -31,36 +59,26 @@ const CheckInteractions = (props: Props) => {
         alignContent: "center",
         justifyContent: "center",
       }}>
-      {interactions ? (
-        <>
-          {interactions.reactions.map((reaction: any) => (
-            <Box
-              sx={{
-                padding: 1,
-              }}
-              key={reaction.id}>
-              {reaction.interactions.map((interaction: any, index: number) => (
-                <div key={index}>
-                  <Chip
-                    label={interaction.description}
-                    sx={{
-                      fontSize: 16,
-                    }}
-                    color="error"
-                    icon={
-                      <ErrorIcon
-                        sx={{
-                          color: "red",
-                        }}
-                      />
-                    }
-                  />
-                </div>
-              ))}
-            </Box>
-          ))}
-        </>
-      ) : null}
+      {uniqDesc ? (
+        uniqDesc.map((item, index) => (
+          <Box
+            sx={{
+              padding: 1,
+            }}
+            key={index}>
+            <Chip
+              label={item}
+              sx={{ fontSize: 16 }}
+              color="error"
+              icon={<ErrorIcon sx={{ color: "red" }} />}
+            />
+          </Box>
+        ))
+      ) : interactionsFetching ? (
+        <CircularProgress />
+      ) : (
+        "No interactions found"
+      )}
     </Box>
   );
 };

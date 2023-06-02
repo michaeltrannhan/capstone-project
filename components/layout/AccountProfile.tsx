@@ -52,7 +52,7 @@ export const AccountProfile = (props: AccountProfileProps) => {
   React.useEffect(() => {
     return () => URL.revokeObjectURL(selectedImage);
   }, [selectedImage]);
-  if (!props.profile.attachment) return <CircularProgress />;
+  // if (!props.profile.attachment) return <>not found image</>;
   return (
     <Card>
       <CardContent>

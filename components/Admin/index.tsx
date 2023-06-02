@@ -400,18 +400,40 @@ const App = () => {
             title="MediReminder"
             layout={CustomLayout}>
             {(permissions: Role) => {
-              const filteredResources = permissions.roleAccessesResources
-                .filter(
-                  (e) =>
-                    !e.resource.name.includes("manage") &&
-                    !e.resource.name.includes("saves") &&
-                    !e.resource.name.includes("includes") &&
-                    !e.resource.name.includes("reminder_plan") &&
-                    !e.resource.name.includes("attachment") &&
-                    !e.resource.name.includes("operator_account") &&
-                    !e.resource.name.includes("hospital")
-                )
-                .sort();
+              const filteredResources =
+                permissions.name === "ADMIN"
+                  ? permissions.roleAccessesResources
+                      .filter(
+                        (e) =>
+                          !e.resource.name.includes("manage") &&
+                          !e.resource.name.includes("saves") &&
+                          !e.resource.name.includes("includes") &&
+                          !e.resource.name.includes("reminder_plan") &&
+                          !e.resource.name.includes("attachment") &&
+                          !e.resource.name.includes("user") &&
+                          !e.resource.name.includes("resource") &&
+                          !e.resource.name.includes("role")
+                      )
+                      .sort((a, b) =>
+                        a.resource.name.localeCompare(b.resource.name)
+                      )
+                  : permissions.roleAccessesResources
+                      .filter(
+                        (e) =>
+                          !e.resource.name.includes("manage") &&
+                          !e.resource.name.includes("saves") &&
+                          !e.resource.name.includes("includes") &&
+                          !e.resource.name.includes("reminder_plan") &&
+                          !e.resource.name.includes("attachment") &&
+                          !e.resource.name.includes("operator_account") &&
+                          !e.resource.name.includes("hospital") &&
+                          !e.resource.name.includes("user") &&
+                          !e.resource.name.includes("resource") &&
+                          !e.resource.name.includes("role")
+                      )
+                      .sort((a, b) =>
+                        a.resource.name.localeCompare(b.resource.name)
+                      );
 
               return (
                 <>
@@ -442,6 +464,7 @@ const App = () => {
                       <Resource
                         key={index}
                         name={resourceName}
+
                         // options={{ label: displayLabel }}
                         icon={icon}
                         list={e.canView ? listComponent : Empty}

@@ -22,6 +22,7 @@ const PatientList = () => {
   const { permissions, isLoading } = usePermissions<Role, any>();
   const code = localStorage.getItem("code");
   const redirect = useRedirect();
+
   if (isLoading) {
     return <p>Loading...</p>;
   } else
@@ -62,7 +63,6 @@ const PatientList = () => {
                 borderTopLeftRadius: "20px",
                 borderTopRightRadius: "20px",
               },
-              "": {},
             }}>
             <Datagrid
               sx={{
@@ -230,12 +230,6 @@ const PatientList = () => {
                 source="patientAccount.phoneNumber"
                 sortable={false}
                 label="Phone number"
-                emptyText="Not available"
-              />
-              <TextField
-                source="patientAccount.username"
-                sortable={false}
-                label="Username"
                 emptyText="Not available"
               />
 

@@ -28,6 +28,7 @@ import {
 } from "@mui/material";
 import ChatThread from "./ChatThread";
 import SendIcon from "@mui/icons-material/Send";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 
 // const colRef = collection(db, "rooms");
 
@@ -108,7 +109,21 @@ const Chat = () => {
       refetchOnWindowFocus: false,
     }
   );
-  console.log(chatData);
+  // console.log(chatData);
+  // React.useEffect(() => {
+  //   const unsubscribe = async () => {
+  //     const userSnap = await getDoc(doc(db, "users", userIdentity?.code));
+  //     if (userSnap.exists()) {
+  //       const userData = userSnap.data();
+  //       const { rooms } = userData;
+  //       const ret = [];
+  //       for (const room of rooms) {
+  //         const roomSnap = await getDoc(doc(db, "rooms", room));
+  //         const medicationPlanName = await
+  //       }
+  //     }
+  //   };
+  // });
   if (chatLoading) return <div>Loading...</div>;
   return (
     <>
@@ -149,12 +164,14 @@ const Chat = () => {
                 borderColor: "divider",
                 boxShadow: "-moz-initial",
                 padding: 2,
-                height: "100%",
+                height: "calc(100vh - 12rem)",
               }}>
               <Tabs
                 orientation="vertical"
                 variant="scrollable"
                 value={value}
+                // scrollButtons
+                visibleScrollbar
                 onChange={handleChange}
                 aria-label="Vertical tabs example"
                 sx={{
@@ -165,6 +182,7 @@ const Chat = () => {
                   borderColor: "divider",
                   width: "100%",
                   height: "100%",
+
                   ".MuiTabs-root": {
                     borderRadius: "20px",
                   },

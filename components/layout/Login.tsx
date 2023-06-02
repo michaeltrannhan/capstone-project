@@ -14,15 +14,13 @@ import { useLogin, useNotify } from "react-admin";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import LockIcon from "@mui/icons-material/Lock";
 import ClearIcon from "@mui/icons-material/Clear";
-import {
-  useForm,
-  Controller,
-  SubmitHandler,
-} from "react-hook-form";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
 import Box from "@mui/material/Box";
 import logo from "../../assets/images/logo.png";
 import Image from "next/image";
+import { DevTool } from "@hookform/devtools";
+
 interface FormValues {
   username: string;
   password: string;
@@ -206,9 +204,9 @@ const Login = () => {
           </Card>
         </Box>
       </form>
+      <DevTool control={control}  />
     </>
   );
 };
-
 
 export default Login;
