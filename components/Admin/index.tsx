@@ -412,7 +412,8 @@ const App = () => {
                           !e.resource.name.includes("attachment") &&
                           !e.resource.name.includes("user") &&
                           !e.resource.name.includes("resource") &&
-                          !e.resource.name.includes("role")
+                          !e.resource.name.includes("role") &&
+                          !e.resource.name.includes("operator")
                       )
                       .sort((a, b) =>
                         a.resource.name.localeCompare(b.resource.name)
@@ -464,7 +465,6 @@ const App = () => {
                       <Resource
                         key={index}
                         name={resourceName}
-
                         // options={{ label: displayLabel }}
                         icon={icon}
                         list={e.canView ? listComponent : Empty}

@@ -132,7 +132,7 @@ const MedicationPlanList = () => {
             "& .column-id": {
               width: "20px",
             },
-            "& .column-name": {
+            "& .column-patientAccountId": {
               maxWidth: "50px",
             },
             "& .column-code": {
@@ -157,29 +157,25 @@ const MedicationPlanList = () => {
           <BooleanField source="completed" sortable={false} />
           {permissions.name === "DOCTOR" ? null : (
             <ActionToolbar>
-              <EditButton
-                variant="text"
-                sx={{
-                  width: "100%",
-                  padding: 0,
-                }}
-              />
+              <></>
               <ShowButton variant="text" />
             </ActionToolbar>
           )}
-          <WithRecord
-            render={(record) => {
-              return (
-                <Button
-                  label="Show"
-                  onClick={() =>
-                    redirect("show", "medication-plans", record.id)
-                  }
-                  variant="text"
-                />
-              );
-            }}
-          />
+          {permissions.name === "DOCTOR" && (
+            <WithRecord
+              render={(record) => {
+                return (
+                  <Button
+                    label="Show"
+                    onClick={() =>
+                      redirect("show", "medication-plans", record.id)
+                    }
+                    variant="text"
+                  />
+                );
+              }}
+            />
+          )}
         </Datagrid>
       </List>
     </>

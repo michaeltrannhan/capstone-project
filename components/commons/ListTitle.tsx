@@ -16,7 +16,7 @@ const ListTitle = ({ resource }: { resource: string }) => {
       <Typography variant="h3" sx={{ marginTop: "40px", marginLeft: "20px" }}>
         List of {resource}
       </Typography>
-      {permissions.name === "ADMIN" || permissions.name == "HOSPITAL_ADMIN" ? (
+      {permissions.name === "ADMIN" ? (
         <>
           {!unacceptedResource.includes(resource) && (
             <CreateButton

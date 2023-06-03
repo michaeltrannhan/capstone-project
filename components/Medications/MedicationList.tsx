@@ -131,8 +131,7 @@ const MedicationList = () => {
           <TextField source="code" />
           <TextField source="description" cellClassName="description" />
           <ActionToolbar>
-            {permissions.name === "ADMIN" ||
-            permissions.name === "HOSPITAL_ADMIN" ? (
+            {permissions.name === "ADMIN" ? (
               <EditButton
                 variant="text"
                 sx={{
