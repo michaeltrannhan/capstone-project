@@ -101,9 +101,9 @@ const PatientList = () => {
                 "& .column-name": {
                   maxWidth: "50px",
                 },
-                "& .column-code": {
-                  maxWidth: "50px",
-                },
+                // "& .column-code": {
+                //   maxWidth: "50px",
+                // },
                 "& .column-undefined": {
                   justifyItems: "end",
                   overflowX: "auto",
