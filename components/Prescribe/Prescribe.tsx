@@ -137,7 +137,7 @@ const Prescribe = () => {
   const handleGenerateQRCode = (medicationPlanId: number) => {
     const medicationPlan = formik.values;
     const medPlan = {
-      id: medicationPlanId,
+      medicationPlanId: medicationPlanId,
       doctorId: medicationPlan.doctorId,
       reminderPlans: medicationPlan.reminderPlans,
       name: medicationPlan.name,
