@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-export const apiURL = "https://capstone-project-hcmut.herokuapp.com/";
+export const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 export type CustomRoutes = "Prescribe" | "Chat";
 
