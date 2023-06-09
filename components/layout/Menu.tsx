@@ -35,10 +35,9 @@ export const CustomMenu = () => {
     <Menu
       sx={{
         "&.RaMenu-open	": {
-          marginTop: 0,
-          height: "100%",
+          margin:0,
+          height: "100vh",
           borderRadius: "20px",
-          // background: "#F9FAFB",
           background: "white",
         },
       }}>

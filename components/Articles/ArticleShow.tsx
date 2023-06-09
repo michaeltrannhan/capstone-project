@@ -129,6 +129,9 @@ const ArticleShow = () => {
               <WithRecord render={(record) => <>{record.id}</>} />
             </Grid>
           </Grid>
+
+          {/* Delete the hospital ID based on requirements
+
           <Grid item container md={6} xs={12}>
             <Grid item xs={4}>
               <Typography variant="h5" color="midnightblue">
@@ -138,7 +141,7 @@ const ArticleShow = () => {
             <Grid item xs={8}>
               <WithRecord render={(record) => <>{record.hospitalId}</>} />
             </Grid>
-          </Grid>
+          </Grid> */}
           <Grid item xs={12}>
             <Typography variant="h5" color="midnightblue">
               Content of the article:

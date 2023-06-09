@@ -13,16 +13,19 @@ import {
   useRedirect,
 } from "react-admin";
 
-type Props = {};
-
 const PatientCreate = () => {
   const [create, { error }] = useCreate();
   const redirect = useRedirect();
   const notify = useNotify();
   const patientCreate = (data: any) => {
+    // console.log(data);
     create("patients", { data });
     if (error) {
-      return notify(<Alert severity="error">New patient added</Alert>);
+      return notify(
+        <Alert severity="error">
+          <>Error creating account: {error}</>
+        </Alert>
+      );
     }
     redirect("list", "patients");
     notify(<Alert severity="success">New patient added</Alert>);
@@ -109,6 +112,7 @@ const PatientCreate = () => {
             variant="outlined"
             source="birthday"
             label="Birthday"
+            parse={(value) => new Date(value).toISOString()}
             fullWidth
           />
           <SaveButton />

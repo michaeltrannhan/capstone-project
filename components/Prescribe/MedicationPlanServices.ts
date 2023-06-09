@@ -8,7 +8,7 @@ const createMedicationPlan = async (medicationPlanForm: MedicationPlanForm) => {
         `${apiURL}medication-plans`,
         medicationPlanForm
       );
-    console.log({ config, data, headers, status, statusText, request });
+    // console.log({ config, data, headers, status, statusText, request });
     return data;
   } catch (error) {
     console.log(JSON.stringify(error, null, 2));

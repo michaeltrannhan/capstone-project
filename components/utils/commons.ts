@@ -248,10 +248,17 @@ export type ReminderPlanForm =
   | SelectedDaysReminderPlanForm;
 
 export type MedicationPlanForm = {
-  patientId?: number;
+  // patientId?: number;
   name?: string;
+  phoneNumber?: number;
+  fullName?: string;
+  address?: string;
+  gender?: string;
+  socialSecurityNumber?: string;
+  nationality?: string;
   reminderPlans: ReminderPlanForm[];
   doctorId: number;
+  note?: string;
 };
 
 export type MedicationPlanFormWithId = MedicationPlanForm & {

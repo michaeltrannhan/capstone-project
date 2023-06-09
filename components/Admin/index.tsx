@@ -1,13 +1,5 @@
-import React, { Component, ReactElement, useMemo } from "react";
-import {
-  Admin,
-  Resource,
-  CustomRoutes,
-  CreateProps,
-  Title,
-  defaultTheme,
-  RaThemeOptions,
-} from "react-admin";
+import React, { useMemo } from "react";
+import { Admin, Resource, CustomRoutes, defaultTheme } from "react-admin";
 import { authProvider } from "../AuthProvider";
 import { Route, BrowserRouter } from "react-router-dom";
 import Login from "../layout/Login";
@@ -29,8 +21,6 @@ import { Provider } from "react-redux";
 import store from "../../hooks/store/index";
 import "dayjs/locale/en-gb";
 
-import MedicationPlanShow from "../MedicationPlans/MedicationPlanShow";
-import PatientShow from "../Patients/PatientShow";
 import { ThemeOptions, Typography, createTheme } from "@mui/material";
 import Chat from "../Chat";
 
@@ -60,11 +50,13 @@ import ArticleShow from "../Articles/ArticleShow";
 import PatientList from "../Patients/PatientList";
 import PatientCreate from "../Patients/PatientCreate";
 import PatientEdit from "../Patients/PatientEdit";
+import PatientShow from "../Patients/PatientShow";
 // import PatientShow from "../Patients/PatientShow";
 //Medication Plan Resources
 import MedicationPlanList from "../MedicationPlans/MedicationPlanList";
 import MedicationPlanCreate from "../MedicationPlans/MedicationPlanCreate";
 import MedicationPlanEdit from "../MedicationPlans/MedicationPlanEdit";
+import MedicationPlanShow from "../MedicationPlans/MedicationPlanShow";
 // import MedicationPlanShow from "../MedicationPlans/MedicationPlanShow";
 
 import { Role, RoleAccessesResources } from "../utils/commons";
@@ -223,9 +215,6 @@ const App = () => {
           root: {
             backgroundImage: "none",
             borderRadius: "20px",
-            // borderRadius: "12px",
-            // border: "1px solid #e0e0e0",
-            // borderBottomRadius: 0,
           },
         },
       },
@@ -255,8 +244,6 @@ const App = () => {
         styleOverrides: {
           root: {
             padding: 0,
-            // margin: "2em 0 0 0",
-            // marginBottom: "20px",
             backgroundColor: "#fff",
           },
         },
@@ -276,12 +263,9 @@ const App = () => {
       MuiTablePagination: {
         styleOverrides: {
           root: {
-            // borderTopLeftRadius: "1px",
-            // borderTopRightRadius: "1px",
             borderRadius: "0 0 20px 20px",
           },
           toolbar: {
-            // border: "1px solid #e0e0e0",
             border: "none",
             borderRadius: "0 0 20px 20px",
           },
@@ -297,12 +281,7 @@ const App = () => {
             "& .RaDatagrid-headerCell": {
               background: "rgb(248, 249, 250)",
             },
-            "& .RaDatagrid-row	": {
-              // "& :last-child > ": {
-              //   borderBottomLeftRadius: 0,
-              //   borderBottomRightRadius: 0,
-              // },
-            },
+
             "& .RaDatagrid-tbody	": {
               "& .RaDatagrid-row	": {
                 "&:last-child > td": {
