@@ -59,7 +59,7 @@ import MedicationPlanEdit from "../MedicationPlans/MedicationPlanEdit";
 import MedicationPlanShow from "../MedicationPlans/MedicationPlanShow";
 // import MedicationPlanShow from "../MedicationPlans/MedicationPlanShow";
 
-import { Role, RoleAccessesResources } from "../utils/commons";
+import { Role, RoleAccessesResources, apiURL } from "../utils/commons";
 import palette from "../theme/pallete";
 import shadows from "../theme/shadow";
 import typography from "../theme/typography";
@@ -70,7 +70,7 @@ import ProfilePage from "../layout/Profile";
 import api from "../../services";
 import { QueryClient } from "react-query";
 const dataProvider = DataProvider(
-  "https://capstone-project-hcmut.herokuapp.com"
+  apiURL as string
   // "http://localhost:3000"
 );
 
@@ -87,8 +87,6 @@ const myDateProvider = {
   },
 };
 
-// const dataProvider = simpleRestProvider("http://localhost:3000", fetchJson);
-const Logo = () => <Image src={logo} alt="MediReminder" />;
 
 function getCurrentActionForResource(keyword: string) {
   switch (keyword) {
