@@ -25,6 +25,10 @@ import { User } from "../utils/commons";
 type Props = {};
 
 const PatientShow = () => {
+  const rawAuth = localStorage.getItem("auth");
+  const auth = rawAuth ? JSON.parse(rawAuth) : {};
+  const permissions = auth.role.name;
+  console.log(permissions);
   return (
     <>
       <Head>
@@ -102,7 +106,7 @@ const PatientShow = () => {
             action={
               <Stack direction="column" spacing={2}>
                 <EditButton />
-                <DeleteButton />
+                {permissions !== "DOCTOR" && <DeleteButton />}
               </Stack>
             }
             sx={{

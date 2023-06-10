@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { authProvider } from "../components/AuthProvider";
 import { HttpError } from "react-admin";
+import { apiURL } from "../components/utils/commons";
 
 export const getToken = () => {
   const auth = localStorage.getItem("auth");
@@ -9,11 +10,8 @@ export const getToken = () => {
   return String(JSON.parse(auth ? auth : "{}").token);
 };
 
-const onRequestSuccess = (config: AxiosRequestConfig) => {};
-
 export const getAuthorizationHeader = () => `Bearer ${getToken()}`;
 
-const apiURL = "https://capstone-project-hcmut.herokuapp.com";
 const api = axios.create({
   baseURL: apiURL,
   // headers: {

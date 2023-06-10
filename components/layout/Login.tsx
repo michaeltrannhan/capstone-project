@@ -75,6 +75,7 @@ const Login = () => {
             justifyContent: "flex-start",
             background: "white",
             backgroundSize: "cover",
+            height: "100vh",
           }}>
           <Card
             sx={{
@@ -204,7 +205,7 @@ const Login = () => {
           </Card>
         </Box>
       </form>
-      <DevTool control={control}  />
+      <DevTool control={control} />
     </>
   );
 };

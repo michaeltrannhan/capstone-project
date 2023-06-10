@@ -85,7 +85,6 @@ export default function AdminDashboard() {
       refetchOnWindowFocus: false,
     }
   );
-  console.log(DashboardData);
 
   if (isDashboardLoading)
     return (

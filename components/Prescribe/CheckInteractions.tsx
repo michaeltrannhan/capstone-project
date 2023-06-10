@@ -48,8 +48,6 @@ const CheckInteractions = (props: Props) => {
     reaction.interactions.map((item) => item.description)
   );
   const uniqDesc = _.uniq(desc);
-  console.log(uniqDesc);
-  // console.log(interactions.reactions);
   return (
     <Box
       sx={{

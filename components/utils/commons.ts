@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-export const apiURL = "https://capstone-project-hcmut.herokuapp.com/";
+export const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 export type CustomRoutes = "Prescribe" | "Chat";
 
@@ -248,10 +248,17 @@ export type ReminderPlanForm =
   | SelectedDaysReminderPlanForm;
 
 export type MedicationPlanForm = {
-  patientId?: number;
+  // patientId?: number;
   name?: string;
+  phoneNumber?: number;
+  fullName?: string;
+  address?: string;
+  gender?: string;
+  socialSecurityNumber?: string;
+  nationality?: string;
   reminderPlans: ReminderPlanForm[];
   doctorId: number;
+  note?: string;
 };
 
 export type MedicationPlanFormWithId = MedicationPlanForm & {

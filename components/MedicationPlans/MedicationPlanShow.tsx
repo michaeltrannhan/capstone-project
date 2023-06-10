@@ -1,10 +1,12 @@
 import {
   Box,
+  Button,
   Card,
   CardContent,
   CardHeader,
   Grid,
   IconButton,
+  Modal,
   Skeleton,
   Stack,
   Tab,
@@ -24,6 +26,7 @@ import {
   DateField,
   ChipField,
   BooleanField,
+  ImageField,
 } from "react-admin";
 import {
   ReminderPlanDTO,
@@ -34,6 +37,7 @@ import {
 import MedicationIcon from "@mui/icons-material/Medication";
 import dayjs from "dayjs";
 import PieChart from "./PieChart";
+import Image from "next/image";
 type Props = {};
 
 interface TabPanelProps {
@@ -69,7 +73,9 @@ const MedicationPlanShow = () => {
   const rawAuth = localStorage.getItem("auth");
   const auth = JSON.parse(rawAuth ? rawAuth : "{}");
   const [value, setValue] = React.useState(0);
-
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -94,7 +100,7 @@ const MedicationPlanShow = () => {
           "& .RaShow-card": {
             padding: "20px",
           },
-          width: "50%",
+          width: "60%",
           alignItems: "center",
           flexDirection: "column",
           justifyContent: "center",
@@ -239,7 +245,7 @@ const MedicationPlanShow = () => {
                 <BooleanField fontSize={20} source="completed" />
               </Grid>
             </Grid>
-            <Grid item container xs>
+            <Grid item container>
               <Grid item xs={2}>
                 <Typography
                   variant="body2"
@@ -249,6 +255,45 @@ const MedicationPlanShow = () => {
               </Grid>
               <Grid item xs={10}>
                 <TextField fontSize={20} source="note" />
+              </Grid>
+            </Grid>
+            <Grid item container>
+              <Grid item xs>
+                <WithRecord
+                  render={(record) => (
+                    <div>
+                      <Button onClick={handleOpen}>Open Bill</Button>
+                      <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description">
+                        <Box
+                          sx={{
+                            position: "absolute" as "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            borderRadius: "20px",
+                            width: 1200,
+                            height: "auto",
+                            bgcolor: "background.paper",
+                            border: "none",
+                            boxShadow: 24,
+                            p: 4,
+                            justifyContent: "center",
+                          }}>
+                          <Image
+                            src={record.bill.filePath}
+                            alt="Bill"
+                            width={1080}
+                            height={720}
+                          />
+                        </Box>
+                      </Modal>
+                    </div>
+                  )}
+                />
               </Grid>
             </Grid>
           </Grid>
@@ -282,6 +327,7 @@ const MedicationPlanShow = () => {
                   </Tabs>
                   {record.reminderPlans.map(
                     (reminderPlan: ReminderPlanDTO, index: number) => {
+                      const reminderPlanTime = reminderPlan.reminderPlanTimes;
                       return (
                         <TabPanel key={index} value={value} index={index}>
                           <Card>

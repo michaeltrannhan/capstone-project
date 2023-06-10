@@ -17,6 +17,8 @@ import {
 } from "../../hooks/slices/medications";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { Medication } from "../utils/commons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPills } from "@fortawesome/free-solid-svg-icons";
 
 const MedicationSearchBar = ({ onChange }: any) => {
   const dispatch = useAppDispatch();
@@ -44,6 +46,7 @@ const MedicationSearchBar = ({ onChange }: any) => {
         fullWidth
         onChange={onChange}
         loadingText="Loading Medications..."
+        size="medium"
         noOptionsText="No Medication Found"
         onInputChange={(event: React.SyntheticEvent, newInputValue: string) => {
           setInputValue(newInputValue);
@@ -62,8 +65,14 @@ const MedicationSearchBar = ({ onChange }: any) => {
             label="Search medication"
             fullWidth
             variant="outlined"
+            size="medium"
             InputProps={{
               ...params.InputProps,
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FontAwesomeIcon icon={faPills} size="2xl" />
+                </InputAdornment>
+              ),
               endAdornment: (
                 <React.Fragment>
                   {isLoading ? (
