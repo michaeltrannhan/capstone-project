@@ -78,19 +78,30 @@ const PatientShow = () => {
             title={
               <WithRecord
                 render={(record) => {
-                  return (
-                    <Typography
-                      variant="h5"
-                      fontStyle={"italic"}
-                      fontWeight="700"
-                      color={(theme) => theme.palette.info.light}>{`Patient ${
-                      record.firstName.charAt(0).toUpperCase() +
-                      record.firstName.slice(1)
-                    } ${
-                      record.lastName.charAt(0).toUpperCase() +
-                      record.lastName.slice(1)
-                    }`}</Typography>
-                  );
+                  if (!record.firstName && !record.lastName)
+                    return (
+                      <Typography
+                        variant="h5"
+                        fontStyle={"italic"}
+                        fontWeight="700"
+                        color={(theme) => theme.palette.info.light}>
+                        Patient information
+                      </Typography>
+                    );
+                  else
+                    return (
+                      <Typography
+                        variant="h5"
+                        fontStyle={"italic"}
+                        fontWeight="700"
+                        color={(theme) => theme.palette.info.light}>{`Patient ${
+                        record.firstName.charAt(0).toUpperCase() +
+                        record.firstName.slice(1)
+                      } ${
+                        record.lastName.charAt(0).toUpperCase() +
+                        record.lastName.slice(1)
+                      }`}</Typography>
+                    );
                 }}
               />
             }

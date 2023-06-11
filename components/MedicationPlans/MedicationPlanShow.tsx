@@ -284,7 +284,7 @@ const MedicationPlanShow = () => {
                             justifyContent: "center",
                           }}>
                           <Image
-                            src={record.bill.filePath}
+                            src={record.bill ? record.bill.filePath : ""}
                             alt="Bill"
                             width={1080}
                             height={720}

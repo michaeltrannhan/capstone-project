@@ -51,13 +51,11 @@ import PatientList from "../Patients/PatientList";
 import PatientCreate from "../Patients/PatientCreate";
 import PatientEdit from "../Patients/PatientEdit";
 import PatientShow from "../Patients/PatientShow";
-// import PatientShow from "../Patients/PatientShow";
-//Medication Plan Resources
+
 import MedicationPlanList from "../MedicationPlans/MedicationPlanList";
 import MedicationPlanCreate from "../MedicationPlans/MedicationPlanCreate";
 import MedicationPlanEdit from "../MedicationPlans/MedicationPlanEdit";
 import MedicationPlanShow from "../MedicationPlans/MedicationPlanShow";
-// import MedicationPlanShow from "../MedicationPlans/MedicationPlanShow";
 
 import { Role, RoleAccessesResources, apiURL } from "../utils/commons";
 import palette from "../theme/pallete";

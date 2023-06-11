@@ -107,13 +107,20 @@ const Prescribe = () => {
       const res = await MedicationPlanServices.createMedicationPlan(values);
 
       // console.log(res);
-      setCurrentMedPlanId(res?.id as number);
-      handleGenerateQRCode(res?.id as number);
-      return Promise.resolve(res).then(() => {
-        notify(`Created medication plan successfully, your id is ${res?.id}`, {
-          type: "success",
+      if (res) {
+        setCurrentMedPlanId(res?.id as number);
+        handleGenerateQRCode(res?.id as number);
+        return Promise.resolve(res).then(() => {
+          notify(
+            `Created medication plan successfully, your id is ${res?.id}`,
+            {
+              type: "success",
+            }
+          );
         });
-      });
+      } else {
+        notify("Error creating Medication Plan", { type: "error" });
+      }
     } catch (error) {
       // console.log(error);
       notify(`Error: ${error}`, { type: "error" });
@@ -354,6 +361,7 @@ const Prescribe = () => {
                   fullWidth
                   label="Medication Plan Name"
                   value={formik.values.name || ""}
+                  required
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -499,7 +507,6 @@ const Prescribe = () => {
                 />
               </Grid>
             </Grid>
-
             <Divider sx={{ p: "10px", width: "100%" }} />
             <Typography variant="h3" sx={{ marginTop: "10px" }}>
               List of Medication
@@ -559,7 +566,7 @@ const Prescribe = () => {
                 </Button>
               </ButtonGroup>
             </Grid>
-
+            Current index: {currentPlanIndex}
             {formik.values.reminderPlans.length > 0 && (
               <TableContainer
                 component={Paper}
@@ -607,14 +614,28 @@ const Prescribe = () => {
                               handlePlanOpen();
                             }}
                             deleteHandler={() => {
-                              setCurrentPlanIndex(
-                                index === formik.values.reminderPlans.length - 1
-                                  ? formik.values.reminderPlans.length - 2
-                                  : index === 0
-                                  ? index + 1
-                                  : index - 1
+                              if (
+                                index ===
+                                  formik.values.reminderPlans.length - 1 &&
+                                index !== 0
+                              ) {
+                                setCurrentPlanIndex(index - 1);
+                              } else if (
+                                index === 0 &&
+                                formik.values.reminderPlans.length > 1
+                              ) {
+                                setCurrentPlanIndex(0);
+                              } else if (
+                                index === 0 &&
+                                formik.values.reminderPlans.length === 1
+                              ) {
+                                setCurrentPlanIndex(0);
+                              } else {
+                                setCurrentPlanIndex(index - 1);
+                              }
+                              handleDeleteReminderPlan(
+                                currentPlanIndex as number
                               );
-                              handleDeleteReminderPlan(currentPlanIndex);
                             }}
                           />
                         </TableCell>
