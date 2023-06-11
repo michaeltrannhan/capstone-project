@@ -566,7 +566,6 @@ const Prescribe = () => {
                 </Button>
               </ButtonGroup>
             </Grid>
-            Current index: {currentPlanIndex}
             {formik.values.reminderPlans.length > 0 && (
               <TableContainer
                 component={Paper}
