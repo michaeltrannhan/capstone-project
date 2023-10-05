@@ -1,3 +1,10 @@
+# Sample Accounts
+Hospital Admin: 
+  username: hospital.admin.1
+  password: hospitaladmin
+Doctor: 
+  username: sample.doctor.5
+  password: doctor
 
 # Getting Started
 
